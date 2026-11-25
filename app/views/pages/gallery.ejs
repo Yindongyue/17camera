@@ -1,0 +1,35 @@
+<%- include('../partials/header') %>
+
+<section class="section">
+  <div class="section-head">
+    <h2>作品图库</h2>
+    <div class="tabs">
+      <a href="/gallery" class="<%= cat === '' ? 'on' : '' %>">全部</a>
+      <% categories.forEach(function (c) { %>
+        <a href="/gallery?cat=<%= c.leib %>" class="<%= cat === String(c.leib) ? 'on' : '' %>"><%= c.lb_name %></a>
+      <% }); %>
+    </div>
+  </div>
+
+  <% if (!photos.length) { %>
+    <div class="empty">该分类下暂无作品</div>
+  <% } else { %>
+  <div class="grid grid-4">
+    <% photos.forEach(function (p) { %>
+      <article class="photo-card">
+        <a class="thumb" href="/gallery/<%= p.pid %>"><img loading="lazy" src="<%= photoSrc(p) %>" alt="<%= p.names %>"></a>
+        <div class="meta">
+          <h4><a href="/gallery/<%= p.pid %>"><%= p.names || '未命名作品' %></a></h4>
+          <div class="line">
+            <span><a href="/author/<%= encodeURIComponent(p.users) %>"><%= p.users %></a></span>
+            <span><%= h.fmtDate(p.dat) %></span>
+          </div>
+        </div>
+      </article>
+    <% }); %>
+  </div>
+  <%- include('../partials/pager', { pager: pager, base: '/gallery', params: { cat: cat } }) %>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

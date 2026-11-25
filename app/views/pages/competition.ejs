@@ -1,0 +1,22 @@
+<%- include('../partials/header') %>
+
+<section class="section">
+  <div class="section-head"><h2>摄影赛事 · 参赛作品</h2><span class="more">共 <%= photos.length %> 幅</span></div>
+  <% if (!photos.length) { %>
+    <div class="empty">暂无参赛作品</div>
+  <% } else { %>
+  <div class="grid grid-4">
+    <% photos.forEach(function (p) { %>
+      <article class="photo-card">
+        <a class="thumb" href="/competition/<%= p.pid %>"><img loading="lazy" src="<%= competeSrc(p) %>" alt="<%= p.names %>"></a>
+        <div class="meta">
+          <h4><a href="/competition/<%= p.pid %>"><%= p.names || '参赛作品' %></a></h4>
+          <div class="line"><span><%= p.users %></span><span>点击 <%= p.dj || 0 %></span></div>
+        </div>
+      </article>
+    <% }); %>
+  </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

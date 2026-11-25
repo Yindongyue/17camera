@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+
+<section class="section">
+  <div class="panel" style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+    <% if (userAvatar(profile)) { %>
+      <img src="<%= userAvatar(profile) %>" alt="<%= profile.username %>" style="width:180px;border-radius:10px;flex:none">
+    <% } %>
+    <div style="flex:1;min-width:220px">
+      <h1 style="font-size:22px;margin:0 0 6px"><%= profile.username %></h1>
+      <span class="badge <%= h.badge(profile.flag).cls %>"><%= h.badge(profile.flag).label %></span>
+      <table class="meta-table" style="margin-top:14px;max-width:460px">
+        <% if (profile.sex) { %><tr><th>性别</th><td><%= profile.sex %></td></tr><% } %>
+        <% if (profile.dat) { %><tr><th>加入时间</th><td><%= h.fmtDate(profile.dat) %></td></tr><% } %>
+        <% if (profile.web) { %><tr><th>主页</th><td><a href="<%= profile.web %>" target="_blank" rel="noopener"><%= profile.web %></a></td></tr><% } %>
+        <% if (profile.qq) { %><tr><th>QQ</th><td><%= profile.qq %></td></tr><% } %>
+        <% if (profile.msn) { %><tr><th>MSN</th><td><%= profile.msn %></td></tr><% } %>
+        <tr><th>作品</th><td><%= albums.length %> 组</td></tr>
+        <tr><th>论坛发帖</th><td><%= forumPosts %> 篇</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head"><h2>个人专辑</h2><span class="more">共 <%= albums.length %> 组</span></div>
+  <% if (!albums.length) { %>
+    <div class="empty">这位会员还没有上传作品</div>
+  <% } else { %>
+  <div class="grid grid-4">
+    <% albums.forEach(function (p) { %>
+      <article class="photo-card">
+        <a class="thumb" href="/gallery/<%= p.pid %>"><img loading="lazy" src="<%= photoSrc(p) %>" alt="<%= p.names %>"></a>
+        <div class="meta">
+          <h4><a href="/gallery/<%= p.pid %>"><%= p.names || '未命名作品' %></a></h4>
+          <div class="line"><span><%= catName(p.leib) || '未分类' %></span><span><%= h.fmtDate(p.dat) %></span></div>
+        </div>
+      </article>
+    <% }); %>
+  </div>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

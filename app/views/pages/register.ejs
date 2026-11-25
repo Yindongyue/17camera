@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+
+<section class="section" style="max-width:560px;margin:30px auto">
+  <div class="panel">
+    <h2 style="margin:0 0 18px;font-size:18px">注册会员</h2>
+    <% if (error) { %><div class="alert"><%= error %></div><% } %>
+    <form method="post" action="/register">
+      <div class="form-row"><label>用户名 *</label><input name="username" required value="<%= form.username || '' %>"></div>
+      <div class="form-row"><label>密码 *</label><input name="password" type="password" required></div>
+      <div class="form-row"><label>性别</label>
+        <select name="sex">
+          <option value="">保密</option>
+          <option value="男" <%= form.sex === '男' ? 'selected' : '' %>>男</option>
+          <option value="女" <%= form.sex === '女' ? 'selected' : '' %>>女</option>
+        </select>
+      </div>
+      <div class="form-row"><label>邮箱</label><input name="email" type="email" value="<%= form.email || '' %>"></div>
+      <div class="form-row"><label>QQ</label><input name="qq" value="<%= form.qq || '' %>"></div>
+      <div class="form-row"><label>MSN</label><input name="msn" value="<%= form.msn || '' %>"></div>
+      <div class="form-row"><label>个人主页</label><input name="web" value="<%= form.web || '' %>"></div>
+      <div class="form-row"><label>地址</label><input name="address" value="<%= form.address || '' %>"></div>
+      <div class="form-row"><label>电话</label><input name="tele" value="<%= form.tele || '' %>"></div>
+      <button class="btn" type="submit" style="width:100%">注册</button>
+    </form>
+    <p class="hint" style="margin-top:14px">已有账号？<a href="/login">直接登录</a></p>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

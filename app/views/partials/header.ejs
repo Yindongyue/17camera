@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> · 逸憩摄影</title>
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-top">
+    <a class="logo" href="/">
+      <img src="/images/logo.gif" alt="逸憩摄影">
+      <span class="name">逸憩摄影<span class="sub">17CAMERA.COM</span></span>
+    </a>
+    <div class="header-actions">
+      <% if (user) { %>
+        <span class="who">你好，<a href="/u/<%= encodeURIComponent(user.username) %>"><%= user.username %></a></span>
+        <span class="badge <%= h.badge(user.flag).cls %>"><%= h.badge(user.flag).label %></span>
+        <form method="post" action="/logout" style="margin:0"><button class="btn ghost" style="padding:4px 12px;font-size:13px">退出</button></form>
+      <% } else { %>
+        <a href="/login">登录</a>
+        <a href="/register">注册</a>
+      <% } %>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="wrap">
+      <% nav.forEach(function (item) { %>
+        <% var on = item.href === '/' ? currentPath === '/' : currentPath.indexOf(item.href) === 0; %>
+        <a href="<%= item.href %>" class="<%= on ? 'on' : '' %>"><%= item.label %></a>
+      <% }); %>
+      <form method="get" action="/search">
+        <input type="search" name="q" placeholder="搜索作品 / 资讯 / 器材 / 帖子" value="">
+        <button type="submit">搜索</button>
+      </form>
+    </div>
+  </nav>
+</header>
+<main>
+  <div class="wrap">

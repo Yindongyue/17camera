@@ -1,0 +1,31 @@
+<%- include('../partials/header') %>
+
+<div class="detail">
+  <div>
+    <div class="panel">
+      <h1 style="font-size:22px"><%= camera.xingh || camera.name %></h1>
+      <div class="sub"><%= brand ? brand.sort : '' %> · 收录于 <%= h.fmtDate(camera.dat) %> · 浏览 <%= camera.hits || 0 %></div>
+      <div style="text-align:center;background:#fafafa;border-radius:8px;padding:20px;margin-bottom:18px">
+        <img src="/camera/admin/image/<%= encodeURIComponent(camera.bpic || camera.pic) %>" alt="<%= camera.xingh %>" style="max-height:260px">
+      </div>
+      <table class="spec-table">
+        <% specs.forEach(function (s) { %>
+          <tr><th><%= s.label %></th><td><%= s.value %></td></tr>
+        <% }); %>
+      </table>
+    </div>
+  </div>
+  <aside>
+    <div class="side-card">
+      <h3>器材导航</h3>
+      <p style="font-size:13px;margin:0 0 8px"><a href="/cameras">全部器材</a></p>
+      <% if (brand) { %><p style="font-size:13px;margin:0"><a href="/cameras?brand=<%= brand.sortid %>"><%= brand.sort %> 列表</a></p><% } %>
+    </div>
+    <div class="side-card">
+      <h3>说明</h3>
+      <p style="font-size:13px;color:#666;margin:0">参数资料来自原站 2003–2005 年收录的数据，仅供参考。</p>
+    </div>
+  </aside>
+</div>
+
+<%- include('../partials/footer') %>

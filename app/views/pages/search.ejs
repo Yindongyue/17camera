@@ -1,0 +1,65 @@
+<%- include('../partials/header') %>
+
+<section class="section">
+  <div class="section-head"><h2>搜索</h2></div>
+  <div class="panel" style="margin-bottom:20px">
+    <form method="get" action="/search" style="display:flex;gap:10px">
+      <input name="q" value="<%= q %>" placeholder="输入关键字：作品名、作者、资讯标题、器材型号或帖子标题" style="flex:1;padding:9px 12px;border:1px solid #d5d2cc;border-radius:6px">
+      <button class="btn" type="submit">搜索</button>
+    </form>
+    <% if (q) { %><p class="hint" style="margin:10px 0 0">“<%= q %>” 共找到 <%= total %> 条结果</p><% } %>
+  </div>
+
+  <% if (q) { %>
+    <% if (result.photos.length) { %>
+    <div class="section">
+      <div class="section-head"><h2>作品</h2><span class="more"><%= result.photos.length %> 条</span></div>
+      <div class="grid grid-4">
+        <% result.photos.forEach(function (p) { %>
+          <article class="photo-card">
+            <a class="thumb" href="/gallery/<%= p.pid %>"><img loading="lazy" src="<%= photoSrc(p) %>" alt="<%= p.names %>"></a>
+            <div class="meta"><h4><a href="/gallery/<%= p.pid %>"><%= p.names || '未命名作品' %></a></h4><div class="line"><span><%= p.users %></span></div></div>
+          </article>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
+
+    <% if (result.news.length) { %>
+    <div class="section">
+      <div class="section-head"><h2>资讯</h2><span class="more"><%= result.news.length %> 条</span></div>
+      <div class="list">
+        <% result.news.forEach(function (n) { %>
+          <div class="list-item"><span class="dot"></span><span class="t"><a href="/news/<%= n.n_id %>"><%= n.n_title %></a></span><span class="d"><%= h.fmtDate(n.n_data) %></span></div>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
+
+    <% if (result.threads.length) { %>
+    <div class="section">
+      <div class="section-head"><h2>论坛帖子</h2><span class="more"><%= result.threads.length %> 条</span></div>
+      <div class="list">
+        <% result.threads.forEach(function (t) { %>
+          <div class="list-item"><span class="dot"></span><span class="t"><a href="/forum/thread/<%= t.tid %>"><%= t.subject %></a></span><span class="d"><%= t.author %></span></div>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
+
+    <% if (result.cameras.length) { %>
+    <div class="section">
+      <div class="section-head"><h2>器材</h2><span class="more"><%= result.cameras.length %> 条</span></div>
+      <div class="list">
+        <% result.cameras.forEach(function (c) { %>
+          <div class="list-item"><span class="dot"></span><span class="t"><a href="/cameras/<%= c.id %>"><%= c.xingh || c.name %></a></span><span class="d"><%= c.xs ? c.xs + ' 万像素' : '' %></span></div>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
+
+    <% if (!total) { %><div class="empty">没有找到相关内容</div><% } %>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

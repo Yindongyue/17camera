@@ -1,0 +1,44 @@
+<%- include('../partials/header') %>
+
+<section class="section">
+  <div class="section-head">
+    <h2>
+      <a href="/forum" style="color:#999;font-weight:400;font-size:14px">论坛</a> /
+      <a href="/forum/<%= thread.fid %>" style="color:#999;font-weight:400;font-size:14px"><%= forum ? forum.name : '' %></a> /
+      <%= thread.subject %>
+    </h2>
+    <span class="more">浏览 <%= thread.views || 0 %> · 回复 <%= thread.replies || 0 %></span>
+  </div>
+
+  <% posts.forEach(function (p, idx) { %>
+    <article class="post">
+      <div class="who">
+        <div class="n"><%= p.author %></div>
+        <div class="r"><%= idx === 0 ? '楼主' : '第 ' + (pager.offset + idx) + ' 楼' %></div>
+      </div>
+      <div class="body">
+        <div class="head">
+          <span><%= p.subject || thread.subject %></span>
+          <span><%= h.fmtUnix(p.dateline) %></span>
+        </div>
+        <div class="msg"><%- content(p.message) %></div>
+      </div>
+    </article>
+  <% }); %>
+
+  <%- include('../partials/pager', { pager: pager, base: '/forum/thread/' + thread.tid, params: {} }) %>
+
+  <div class="panel" style="margin-top:26px">
+    <h3 style="margin:0 0 14px;font-size:15px">回复主题</h3>
+    <% if (user) { %>
+      <form method="post" action="/forum/thread/<%= thread.tid %>/reply">
+        <div class="form-row"><label>回复内容</label><textarea name="message" required placeholder="支持 [img] 图片、[url] 链接、[b][i][u] 等基础标记"></textarea></div>
+        <button class="btn" type="submit">发表回复</button>
+      </form>
+    <% } else { %>
+      <p class="hint"><a href="/login?next=<%= encodeURIComponent('/forum/thread/' + thread.tid) %>">登录</a> 后可以回复。</p>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

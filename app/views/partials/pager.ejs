@@ -1,0 +1,19 @@
+<% if (pager.pages > 1) { %>
+<div class="pager">
+  <% if (pager.current > 1) { %>
+    <a href="<%= h.buildQuery(base, Object.assign({}, params, { page: pager.current - 1 })) %>">上一页</a>
+  <% } %>
+  <% pager.items.forEach(function (it) { %>
+    <% if (it === '…') { %>
+      <span class="gap">…</span>
+    <% } else if (it === pager.current) { %>
+      <span class="on"><%= it %></span>
+    <% } else { %>
+      <a href="<%= h.buildQuery(base, Object.assign({}, params, { page: it })) %>"><%= it %></a>
+    <% } %>
+  <% }); %>
+  <% if (pager.current < pager.pages) { %>
+    <a href="<%= h.buildQuery(base, Object.assign({}, params, { page: pager.current + 1 })) %>">下一页</a>
+  <% } %>
+</div>
+<% } %>

@@ -1,0 +1,34 @@
+<%- include('../partials/header') %>
+
+<section class="section">
+  <div class="section-head">
+    <h2>器材库</h2>
+    <div class="tabs">
+      <a href="/cameras" class="<%= brand === '' ? 'on' : '' %>">全部品牌</a>
+      <% brands.forEach(function (b) { %>
+        <a href="/cameras?brand=<%= b.sortid %>" class="<%= brand === String(b.sortid) ? 'on' : '' %>"><%= b.sort %></a>
+      <% }); %>
+    </div>
+  </div>
+
+  <% if (!cameras.length) { %>
+    <div class="empty">暂无器材资料</div>
+  <% } else { %>
+  <div class="grid grid-4">
+    <% cameras.forEach(function (c) { %>
+      <article class="photo-card">
+        <a class="thumb" href="/cameras/<%= c.id %>" style="aspect-ratio:4/3;background:#fff">
+          <img loading="lazy" src="/camera/admin/image/<%= encodeURIComponent(c.pic) %>" alt="<%= c.xingh %>" style="object-fit:contain">
+        </a>
+        <div class="meta">
+          <h4><a href="/cameras/<%= c.id %>"><%= c.xingh || c.name %></a></h4>
+          <div class="line"><span><%= c.xs ? c.xs + ' 万像素' : '' %></span><span><%= h.fmtDate(c.dat) %></span></div>
+        </div>
+      </article>
+    <% }); %>
+  </div>
+  <%- include('../partials/pager', { pager: pager, base: '/cameras', params: { brand: brand } }) %>
+  <% } %>
+</section>
+
+<%- include('../partials/footer') %>

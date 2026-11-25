@@ -1,0 +1,32 @@
+<%- include('../partials/header') %>
+
+<div class="detail">
+  <div>
+    <div class="panel" style="padding:14px">
+      <img src="<%= src %>" alt="<%= photo.names %>" style="width:100%;border-radius:6px;background:#f0f0f0">
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <h1 style="font-size:20px"><%= photo.names || '参赛作品' %></h1>
+      <div class="sub">参赛者：<%= photo.users %> · <%= h.fmtDate(photo.dat) %> · 点击 <%= photo.dj || 0 %></div>
+      <table class="meta-table">
+        <% if (photo.xiangj) { %><tr><th>相机</th><td><%= photo.xiangj %></td></tr><% } %>
+        <% if (photo.jingt) { %><tr><th>镜头</th><td><%= photo.jingt %></td></tr><% } %>
+        <% if (photo.guangq) { %><tr><th>光圈</th><td><%= photo.guangq %></td></tr><% } %>
+        <% if (photo.baog) { %><tr><th>曝光</th><td><%= photo.baog %></td></tr><% } %>
+        <% if (photo.sm) { %><tr><th>说明</th><td><%= photo.sm %></td></tr><% } %>
+      </table>
+    </div>
+  </div>
+  <aside>
+    <div class="side-card">
+      <h3>赛事说明</h3>
+      <p style="font-size:13px;color:#555;margin:0">这里的作品来自逸憩摄影历届摄影比赛，欢迎浏览。</p>
+    </div>
+    <div class="side-card">
+      <h3>更多</h3>
+      <p style="font-size:13px;margin:0"><a href="/competition">返回赛事列表</a></p>
+    </div>
+  </aside>
+</div>
+
+<%- include('../partials/footer') %>

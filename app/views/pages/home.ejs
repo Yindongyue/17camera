@@ -1,0 +1,173 @@
+<%- include('../partials/header') %>
+
+<% var hero = featured[0] || latest[0]; %>
+<section class="hero">
+  <% if (hero) { %>
+  <a class="hero-main" href="/gallery/<%= hero.pid %>">
+    <img src="<%= photoSrc(hero) %>" alt="<%= hero.names %>">
+    <div class="caption">
+      <h1><%= hero.names || '推荐作品' %></h1>
+      <p>摄影：<%= hero.users %> · <%= h.fmtDate(hero.dat) %> · 点击 <%= hero.dj || 0 %></p>
+    </div>
+  </a>
+  <% } %>
+  <div class="hero-side">
+    <div class="box">
+      <h3>最新资讯</h3>
+      <ul>
+        <% newsList.slice(0, 5).forEach(function (n) { %>
+          <li><a href="/news/<%= n.n_id %>"><%= h.cut(n.n_title, 34) %></a></li>
+        <% }); %>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>论坛新帖</h3>
+      <ul>
+        <% forumLatest.slice(0, 5).forEach(function (t) { %>
+          <li><a href="/forum/thread/<%= t.tid %>"><%= h.cut(t.subject, 34) %></a></li>
+        <% }); %>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>推荐作品</h2>
+    <a class="more" href="/gallery">查看全部 →</a>
+  </div>
+  <div class="grid grid-4">
+    <% featured.slice(0, 8).forEach(function (p) { %>
+      <article class="photo-card">
+        <a class="thumb" href="/gallery/<%= p.pid %>"><img loading="lazy" src="<%= photoSrc(p) %>" alt="<%= p.names %>"></a>
+        <div class="meta">
+          <h4><a href="/gallery/<%= p.pid %>"><%= p.names || '未命名作品' %></a></h4>
+          <div class="line"><span><a href="/author/<%= encodeURIComponent(p.users) %>"><%= p.users %></a></span><span>点击 <%= p.dj || 0 %></span></div>
+        </div>
+      </article>
+    <% }); %>
+    <% if (!featured.length) { %><div class="empty" style="grid-column:1/-1">暂无推荐作品</div><% } %>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-head">
+    <h2>最新图库</h2>
+    <a class="more" href="/gallery">查看全部 →</a>
+  </div>
+  <div class="grid grid-4">
+    <% latest.forEach(function (p) { %>
+      <article class="photo-card">
+        <a class="thumb" href="/gallery/<%= p.pid %>"><img loading="lazy" src="<%= photoSrc(p) %>" alt="<%= p.names %>"></a>
+        <div class="meta">
+          <h4><a href="/gallery/<%= p.pid %>"><%= p.names || '未命名作品' %></a></h4>
+          <div class="line"><span><%= p.users %></span><span><%= h.fmtDate(p.dat) %></span></div>
+        </div>
+      </article>
+    <% }); %>
+  </div>
+</section>
+
+<div class="grid grid-2">
+  <section class="section">
+    <div class="section-head">
+      <h2>摄影资讯</h2>
+      <a class="more" href="/news">更多 →</a>
+    </div>
+    <div class="list">
+      <% newsList.forEach(function (n) { %>
+        <div class="list-item">
+          <span class="dot"></span>
+          <span class="t"><a href="/news/<%= n.n_id %>"><%= h.cut(n.n_title, 40) %></a></span>
+          <span class="d"><%= h.fmtDate(n.n_data) %></span>
+        </div>
+      <% }); %>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section-head">
+      <h2>技术文章</h2>
+      <a class="more" href="/news?cat=article">更多 →</a>
+    </div>
+    <div class="list">
+      <% articles.forEach(function (n) { %>
+        <div class="list-item">
+          <span class="dot"></span>
+          <span class="t"><a href="/news/<%= n.n_id %>"><%= h.cut(n.n_title, 40) %></a></span>
+          <span class="d"><%= h.fmtDate(n.n_data) %></span>
+        </div>
+      <% }); %>
+    </div>
+  </section>
+</div>
+
+<section class="section">
+  <div class="section-head">
+    <h2>新品器材</h2>
+    <a class="more" href="/cameras">进入器材库 →</a>
+  </div>
+  <div class="grid grid-3">
+    <% cameras.forEach(function (c) { %>
+      <article class="photo-card">
+        <a class="thumb" href="/cameras/<%= c.id %>" style="aspect-ratio:16/10">
+          <img loading="lazy" src="/camera/admin/image/<%= encodeURIComponent(c.pic) %>" alt="<%= c.xingh %>" style="object-fit:contain;background:#fff">
+        </a>
+        <div class="meta">
+          <h4><a href="/cameras/<%= c.id %>"><%= c.xingh || c.name %></a></h4>
+          <div class="line"><span><%= c.xs ? c.xs + ' 万像素' : '' %></span><span><%= h.fmtDate(c.dat) %></span></div>
+        </div>
+      </article>
+    <% }); %>
+  </div>
+</section>
+
+<div class="grid grid-2">
+  <section class="section">
+    <div class="section-head"><h2>推荐模特</h2><a class="more" href="/models">全部模特 →</a></div>
+    <% if (featuredModel) { %>
+      <div class="panel" style="display:flex;gap:18px;align-items:flex-start">
+        <div style="width:150px;flex:none">
+          <a href="/models/<%= encodeURIComponent(featuredModel.name) %>">
+            <img src="/pic/<%= encodeURIComponent(featuredModel.jhhao) %>/<%= encodeURIComponent(featuredModel.tj_pic || '') %>" alt="<%= featuredModel.name %>" style="border-radius:8px">
+          </a>
+        </div>
+        <div>
+          <h3 style="margin:0 0 6px"><a href="/models/<%= encodeURIComponent(featuredModel.name) %>"><%= featuredModel.name %></a></h3>
+          <p style="margin:0;color:#666;font-size:13px">
+            <%= [featuredModel.sex, featuredModel.age && featuredModel.age + ' 岁', featuredModel.height && featuredModel.height + ' cm'].filter(Boolean).join(' · ') %>
+          </p>
+          <p style="margin:8px 0 0;font-size:13px;color:#555"><%= h.cut(featuredModel.intro || featuredModel.pslb || '', 60) %></p>
+        </div>
+      </div>
+    <% } else { %><div class="empty">暂无模特资料</div><% } %>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>会员推荐</h2></div>
+    <% if (featuredMember) { %>
+      <div class="panel" style="display:flex;gap:18px;align-items:center">
+        <div style="width:130px;flex:none">
+          <% if (userAvatar(featuredMember)) { %>
+            <img src="<%= userAvatar(featuredMember) %>" alt="<%= featuredMember.username %>" style="border-radius:8px">
+          <% } %>
+        </div>
+        <div>
+          <h3 style="margin:0 0 6px"><a href="/author/<%= encodeURIComponent(featuredMember.username) %>"><%= featuredMember.username %></a></h3>
+          <span class="badge <%= h.badge(featuredMember.flag).cls %>"><%= h.badge(featuredMember.flag).label %></span>
+          <p style="margin:8px 0 0;font-size:13px;color:#666"><%= h.fmtDate(featuredMember.dat) %> 加入 · 个人专辑</p>
+        </div>
+      </div>
+    <% } else { %><div class="empty">暂无推荐会员</div><% } %>
+  </section>
+</div>
+
+<section class="section">
+  <div class="grid grid-4">
+    <div class="panel" style="text-align:center"><div style="font-size:26px;font-weight:700;color:var(--accent)"><%= stats.photos %></div><div class="hint">摄影作品</div></div>
+    <div class="panel" style="text-align:center"><div style="font-size:26px;font-weight:700;color:var(--accent)"><%= stats.members %></div><div class="hint">注册会员</div></div>
+    <div class="panel" style="text-align:center"><div style="font-size:26px;font-weight:700;color:var(--accent)"><%= stats.threads %></div><div class="hint">论坛主题</div></div>
+    <div class="panel" style="text-align:center"><div style="font-size:26px;font-weight:700;color:var(--accent)"><%= stats.posts %></div><div class="hint">论坛帖子</div></div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

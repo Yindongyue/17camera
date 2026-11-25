@@ -1,0 +1,48 @@
+<%- include('../partials/header') %>
+
+<section class="section">
+  <div class="section-head">
+    <h2><a href="/forum" style="color:#999;font-weight:400;font-size:14px">论坛</a> / <%= forum.name %></h2>
+    <span class="more"><%= forum.description || '' %></span>
+  </div>
+
+  <% if (!threads.length) { %>
+    <div class="empty">这个版块还没有主题</div>
+  <% } else { %>
+  <table class="table">
+    <thead>
+      <tr><th style="width:60%">主题</th><th>作者</th><th class="num">回复 / 浏览</th><th class="num">最后更新</th></tr>
+    </thead>
+    <tbody>
+      <% threads.forEach(function (t) { %>
+        <tr>
+          <td>
+            <% if (Number(t.topped)) { %><span class="badge badge-admin">置顶</span> <% } %>
+            <% if (Number(t.digest)) { %><span class="badge badge-vip">精华</span> <% } %>
+            <a href="/forum/thread/<%= t.tid %>"><%= t.subject %></a>
+          </td>
+          <td style="white-space:nowrap"><%= t.author %></td>
+          <td class="num"><%= t.replies || 0 %> / <%= t.views || 0 %></td>
+          <td class="num"><%= h.fmtUnix(t.lastpost) %><br><span style="color:#aaa"><%= t.lastposter || '' %></span></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+  <%- include('../partials/pager', { pager: pager, base: '/forum/' + forum.fid, params: {} }) %>
+  <% } %>
+
+  <div class="panel" style="margin-top:26px">
+    <h3 style="margin:0 0 14px;font-size:15px">发表新主题</h3>
+    <% if (user) { %>
+      <form method="post" action="/forum/<%= forum.fid %>/new">
+        <div class="form-row"><label>标题</label><input name="subject" maxlength="120" required></div>
+        <div class="form-row"><label>内容</label><textarea name="message" required placeholder="支持 [img] 图片、[url] 链接、[b][i][u] 等基础标记"></textarea></div>
+        <button class="btn" type="submit">发表主题</button>
+      </form>
+    <% } else { %>
+      <p class="hint"><a href="/login?next=<%= encodeURIComponent('/forum/' + forum.fid) %>">登录</a> 后可以发帖。</p>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

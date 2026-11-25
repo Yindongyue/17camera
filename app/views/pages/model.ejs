@@ -1,0 +1,49 @@
+<%- include('../partials/header') %>
+
+<div class="detail">
+  <div>
+    <section class="section">
+      <div class="section-head"><h2><%= model.name %> 的写真</h2><span class="more">共 <%= shots.length %> 张</span></div>
+      <% if (!shots.length) { %>
+        <div class="empty">暂无写真</div>
+      <% } else { %>
+      <div class="grid grid-3">
+        <% shots.forEach(function (s) { %>
+          <article class="photo-card">
+            <a class="thumb" href="<%= mmSrc(s) %>" target="_blank" style="aspect-ratio:3/4">
+              <img loading="lazy" src="<%= mmSrc(s) %>" alt="<%= model.name %>">
+            </a>
+            <div class="meta">
+              <div class="line"><span><%= h.fmtDate(s.dat) %></span><span>点击 <%= s.dj || 0 %></span></div>
+            </div>
+          </article>
+        <% }); %>
+      </div>
+      <% } %>
+    </section>
+  </div>
+
+  <aside>
+    <div class="side-card">
+      <h3>模特资料</h3>
+      <% var cover = modelCover(model.name); if (cover) { %><img class="avatar" src="<%= cover %>" alt="<%= model.name %>"><% } %>
+      <table class="meta-table">
+        <% if (model.sex) { %><tr><th>性别</th><td><%= model.sex %></td></tr><% } %>
+        <% if (model.age) { %><tr><th>年龄</th><td><%= model.age %></td></tr><% } %>
+        <% if (model.height) { %><tr><th>身高</th><td><%= model.height %> cm</td></tr><% } %>
+        <% if (model.weight) { %><tr><th>体重</th><td><%= model.weight %> kg</td></tr><% } %>
+        <% if (model.sw) { %><tr><th>三围</th><td><%= model.sw %></td></tr><% } %>
+        <% if (model.pslb) { %><tr><th>拍摄类别</th><td><%= model.pslb %></td></tr><% } %>
+        <% if (model.mtype) { %><tr><th>类型</th><td><%= model.mtype %></td></tr><% } %>
+        <% if (model.dat) { %><tr><th>加入时间</th><td><%= h.fmtDate(model.dat) %></td></tr><% } %>
+      </table>
+      <% if (model.intro) { %><p style="font-size:13px;color:#555;margin:12px 0 0"><%= model.intro %></p><% } %>
+    </div>
+    <div class="side-card">
+      <h3>更多</h3>
+      <p style="font-size:13px;margin:0"><a href="/models">返回模特列表</a></p>
+    </div>
+  </aside>
+</div>
+
+<%- include('../partials/footer') %>

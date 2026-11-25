@@ -413,16 +413,20 @@ if (!function_exists('yiqi_cut')) {
     }
 }
 
-function mb_eregi($pattern, $string, &$regs = null)
-{
-    return eregi($pattern, $string, $regs);
+if (!function_exists('mb_eregi')) {
+    function mb_eregi($pattern, $string, &$regs = null)
+    {
+        return eregi($pattern, $string, $regs);
+    }
 }
 
-function mb_convert_encoding($string, $to, $from = null)
-{
-    if ($from === null || $from === '') {
-        return $string;
+if (!function_exists('mb_convert_encoding')) {
+    function mb_convert_encoding($string, $to, $from = null)
+    {
+        if ($from === null || $from === '') {
+            return $string;
+        }
+        $result = @iconv($from, 'UTF-8//IGNORE', $string);
+        return $result === false ? $string : $result;
     }
-    $result = @iconv($from, 'UTF-8//IGNORE', $string);
-    return $result === false ? $string : $result;
 }

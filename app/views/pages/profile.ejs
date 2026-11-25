@@ -1,0 +1,41 @@
+<%- include('../partials/header') %>
+
+<div class="detail">
+  <div>
+    <div class="panel" style="margin-bottom:16px">
+      <h1 style="font-size:20px;margin:0 0 10px"><%= profile.username %></h1>
+      <span class="badge <%= h.badge(profile.flag).cls %>"><%= h.badge(profile.flag).label %></span>
+      <table class="meta-table" style="margin-top:14px;max-width:520px">
+        <% if (profile.sex) { %><tr><th>性别</th><td><%= profile.sex %></td></tr><% } %>
+        <% if (profile.email) { %><tr><th>邮箱</th><td><%= profile.email %></td></tr><% } %>
+        <% if (profile.qq) { %><tr><th>QQ</th><td><%= profile.qq %></td></tr><% } %>
+        <% if (profile.msn) { %><tr><th>MSN</th><td><%= profile.msn %></td></tr><% } %>
+        <% if (profile.web) { %><tr><th>主页</th><td><a href="<%= profile.web %>" target="_blank" rel="noopener"><%= profile.web %></a></td></tr><% } %>
+        <% if (profile.address) { %><tr><th>地址</th><td><%= profile.address %></td></tr><% } %>
+        <% if (profile.dat) { %><tr><th>注册时间</th><td><%= h.fmtDate(profile.dat) %></td></tr><% } %>
+      </table>
+      <p style="margin:16px 0 0"><a href="/author/<%= encodeURIComponent(profile.username) %>">查看我的专辑 →</a></p>
+    </div>
+
+    <div class="panel">
+      <h3 style="margin:0 0 12px;font-size:15px">最近发帖</h3>
+      <% if (!posts.length) { %><p class="hint">还没有在论坛发过帖。</p><% } %>
+      <% posts.forEach(function (p) { %>
+        <div style="padding:8px 0;border-bottom:1px dashed #eee;font-size:14px">
+          <a href="/forum/thread/<%= p.tid %>"><%= h.cut(p.subject || p.message, 40) %></a>
+          <span class="hint" style="margin-left:8px"><%= h.fmtUnix(p.dateline) %></span>
+        </div>
+      <% }); %>
+    </div>
+  </div>
+
+  <aside>
+    <div class="side-card">
+      <h3>个人资料</h3>
+      <% if (userAvatar(profile)) { %><img class="avatar" src="<%= userAvatar(profile) %>" alt="<%= profile.username %>"><% } %>
+      <p style="font-size:13px;color:#666;margin:0">作品 <%= albums.length %> 组</p>
+    </div>
+  </aside>
+</div>
+
+<%- include('../partials/footer') %>

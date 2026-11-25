@@ -1,0 +1,23 @@
+<%- include('../partials/header') %>
+
+<section class="section">
+  <div class="section-head"><h2>逸憩模特</h2><span class="more">共 <%= models.length %> 位</span></div>
+  <div class="grid grid-4">
+    <% models.forEach(function (m) { %>
+      <% var cover = modelCover(m.name); %>
+      <article class="photo-card">
+        <a class="thumb" href="/models/<%= encodeURIComponent(m.name) %>">
+          <% if (cover) { %><img loading="lazy" src="<%= cover %>" alt="<%= m.name %>">
+          <% } else { %><div style="display:flex;height:100%;align-items:center;justify-content:center;color:#999">暂无照片</div><% } %>
+        </a>
+        <div class="meta">
+          <h4><a href="/models/<%= encodeURIComponent(m.name) %>"><%= m.name %></a></h4>
+          <div class="line"><span><%= [m.sex, m.age && m.age + '岁', m.height && m.height + 'cm'].filter(Boolean).join(' · ') %></span></div>
+        </div>
+      </article>
+    <% }); %>
+    <% if (!models.length) { %><div class="empty" style="grid-column:1/-1">暂无模特资料</div><% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

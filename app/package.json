@@ -1,0 +1,18 @@
+{
+  "name": "yiqi-archive",
+  "version": "1.0.0",
+  "private": true,
+  "description": "逸憩摄影 (17camera) legacy photo community, rewritten as a Node.js 20 web app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20 <21"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1"
+  }
+}

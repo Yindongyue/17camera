@@ -1,0 +1,80 @@
+<%- include('../partials/header') %>
+
+<div class="detail">
+  <div>
+    <div class="panel" style="padding:14px">
+      <img src="<%= src %>" alt="<%= photo.names %>" style="width:100%;border-radius:6px;background:#f0f0f0">
+    </div>
+
+    <div class="panel" style="margin-top:16px">
+      <h1 style="font-size:20px"><%= photo.names || '未命名作品' %></h1>
+      <div class="sub">
+        作者：<a href="/author/<%= encodeURIComponent(photo.users) %>"><%= photo.users %></a>
+        <span class="badge <%= h.badge(author.flag).cls %>"><%= h.badge(author.flag).label %></span>
+        · <%= h.fmtDate(photo.dat) %> · 点击 <%= photo.dj || 0 %>
+      </div>
+      <table class="meta-table">
+        <tr><th>分类</th><td><%= catName(photo.leib) || '未分类' %></td></tr>
+        <% if (photo.xiangj) { %><tr><th>相机</th><td><%= photo.xiangj %></td></tr><% } %>
+        <% if (photo.xingh) { %><tr><th>型号</th><td><%= photo.xingh %></td></tr><% } %>
+        <% if (photo.jingt) { %><tr><th>镜头</th><td><%= photo.jingt %></td></tr><% } %>
+        <% if (photo.jiaop) { %><tr><th>焦距</th><td><%= photo.jiaop %></td></tr><% } %>
+        <% if (photo.guangq) { %><tr><th>光圈</th><td><%= photo.guangq %></td></tr><% } %>
+        <% if (photo.baog) { %><tr><th>曝光</th><td><%= photo.baog %></td></tr><% } %>
+        <% if (photo.sm) { %><tr><th>说明</th><td><%= photo.sm %></td></tr><% } %>
+      </table>
+    </div>
+
+    <div class="panel" id="comments" style="margin-top:16px">
+      <h3 style="margin:0 0 12px;font-size:15px">评论（<%= comments.length %>）</h3>
+      <% if (!comments.length) { %><p class="hint">还没有评论。</p><% } %>
+      <% comments.forEach(function (c) { %>
+        <div style="padding:10px 0;border-bottom:1px dashed #eee">
+          <div style="font-size:13px;color:#666"><strong><%= c.username %></strong> · <%= h.fmtDateTime(c.dat) %></div>
+          <div style="font-size:14px;margin-top:4px"><%= c.content %></div>
+        </div>
+      <% }); %>
+
+      <div style="margin-top:18px">
+        <% if (user) { %>
+          <form method="post" action="/gallery/<%= photo.pid %>/comment">
+            <div class="form-row">
+              <label>发表评论</label>
+              <textarea name="content" maxlength="1000" required placeholder="说说你对这幅作品的看法"></textarea>
+            </div>
+            <button class="btn" type="submit">提交评论</button>
+          </form>
+        <% } else { %>
+          <p class="hint"><a href="/login?next=<%= encodeURIComponent('/gallery/' + photo.pid) %>">登录</a> 后可以发表评论。</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <aside>
+    <div class="side-card">
+      <h3>关于作者</h3>
+      <% if (userAvatar(author)) { %>
+        <img class="avatar" src="<%= userAvatar(author) %>" alt="<%= author.username %>">
+      <% } %>
+      <p style="margin:0 0 6px;font-size:14px"><a href="/author/<%= encodeURIComponent(photo.users) %>"><%= photo.users %></a></p>
+      <span class="badge <%= h.badge(author.flag).cls %>"><%= h.badge(author.flag).label %></span>
+      <% if (author.dat) { %><p class="hint" style="margin:8px 0 0"><%= h.fmtDate(author.dat) %> 加入</p><% } %>
+    </div>
+
+    <% if (more.length) { %>
+    <div class="side-card">
+      <h3>作者其他作品</h3>
+      <div class="grid grid-2" style="gap:8px">
+        <% more.forEach(function (p) { %>
+          <a href="/gallery/<%= p.pid %>" title="<%= p.names %>">
+            <img loading="lazy" src="<%= photoSrc(p) %>" alt="<%= p.names %>" style="border-radius:6px;aspect-ratio:1;object-fit:cover;width:100%">
+          </a>
+        <% }); %>
+      </div>
+    </div>
+    <% } %>
+  </aside>
+</div>
+
+<%- include('../partials/footer') %>

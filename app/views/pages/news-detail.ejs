@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+
+<div class="detail">
+  <article class="panel">
+    <h1><%= article.n_title %></h1>
+    <div class="sub">
+      <%= h.fmtDate(article.n_data) %> ·
+      <%= label[article.b_id] || '资讯' %> ·
+      作者：<%= article.n_author || '逸憩摄影' %> ·
+      阅读 <%= hits %>
+    </div>
+    <div class="article-body"><%- content %></div>
+  </article>
+
+  <aside>
+    <div class="side-card">
+      <h3>相关文章</h3>
+      <% if (!related.length) { %><p class="hint">暂无相关文章</p><% } %>
+      <ul style="list-style:none;margin:0;padding:0;font-size:13px">
+        <% related.forEach(function (n) { %>
+          <li style="padding:6px 0;border-bottom:1px dashed #eee"><a href="/news/<%= n.n_id %>"><%= h.cut(n.n_title, 28) %></a></li>
+        <% }); %>
+      </ul>
+    </div>
+    <div class="side-card">
+      <h3>浏览板块</h3>
+      <p style="font-size:13px;margin:0 0 10px"><a href="/news">全部资讯</a></p>
+      <p style="font-size:13px;margin:0"><a href="/news?cat=article">技术文章</a></p>
+    </div>
+  </aside>
+</div>
+
+<%- include('../partials/footer') %>
