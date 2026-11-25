@@ -381,6 +381,11 @@ function session_is_registered($name)
     return isset($_SESSION[$name]);
 }
 
+/* Legacy Discuz template constants used by news/ubb.php */
+if (!defined('ALTBG2')) define('ALTBG2', '#F7F7F7');
+if (!defined('BORDERCOLOR')) define('BORDERCOLOR', '#CCCCCC');
+if (!defined('SMDIR')) define('SMDIR', '/images/smilies');
+
 /* ---------- UTF-8 safe title truncation (legacy pages) ---------- */
 if (!function_exists('yiqi_cut')) {
     function yiqi_cut($str, $width = 30, $marker = '……')
