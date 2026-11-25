@@ -1,0 +1,18 @@
+<? if(!defined('IN_DISCUZ')) exit('Access Denied'); ?>
+
+<style type="text/css">
+a:link,a:visited	{ text-decoration: none; color: <?=LINK?> }
+a:hover			{ text-decoration: underline }
+body			{ scrollbar-base-color: <?=ALTBG1?>; scrollbar-arrow-color: <?=BORDERCOLOR?>; font-size: <?=FONTSIZE?>; <?=BGCODE?> }
+table			{ font-family: <?=FONT?>; color: <?=TABLETEXT?>; font-size: <?=FONTSIZE?> }
+textarea,input,object	{ font-family: <?=FONT?>; font-size: <?=FONTSIZE?>;  color: <?=TABLETEXT?>; font-weight: normal; background-color: <?=ALTBG1?>; BORDER-BOTTOM: #CBCBCB 1px solid; BORDER-LEFT: #CBCBCB 1px solid; BORDER-RIGHT: #CBCBCB 1px solid; BORDER-TOP: #CBCBCB 1px solid; }
+select			{ font-family: <?=SMFONT?>; font-size: <?=SMFONTSIZE?>;  color: <?=TABLETEXT?>; font-weight: normal; background-color: <?=ALTBG1?> }
+.nav			{ font-family: <?=FONT?>; font-size: <?=FONTSIZE?>; font-weight: <?=BOLD?> }
+.navtd			{ font-family: <?=FONT?>; font-size: <?=FONTSIZE?>; color: <?=HEADERTEXT?>; text-decoration: none }
+.header			{ font-family: <?=FONT?>; font-size: <?=SMFONTSIZE?>; color: <?=HEADERTEXT?>; font-weight: <?=BOLD?>; <?=HEADERBGCODE?> }
+.category		{ font-family: <?=SMFONT?>; font-size: <?=SMFONTSIZE?>; color: <?=CATTEXT?>; <?=CATBGCODE?> }
+.multi			{ font-family: <?=SMFONT?>; font-size: <?=SMFONTSIZE?>; color: <?=LINK?>; }
+.smalltxt		{ font-family: <?=SMFONT?>; font-size: <?=SMFONTSIZE?> }
+.mediumtxt		{ font-family: <?=FONT?>; font-size: <?=FONTSIZE?>; color: <?=TEXT?> }
+.bold			{ font-weight: <?=BOLD?> }
+</style>

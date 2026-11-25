@@ -1,0 +1,178 @@
+{template header}
+<table cellspacing="0" cellpadding="0" border="0" width="{TABLEWIDTH}" align="center" style="table-layout: fixed"> 
+<tr><td class="nav" width="90%" nowrap>&nbsp;<a href="index.php">$bbname</a> $navigation</td>
+<td align="right" width="10%"><a href="#bottom"><img src="{IMGDIR}/arrow_dw.gif" border="0" align="absmiddle"></a></td>        
+</tr></table><br>
+<table width="{TABLEWIDTH}" border="0" align="center" cellpadding="6" cellspacing="10" background="images/artery-4_imags/artery-bg.gif">
+  <tr> 
+    <td align="center" bgcolor="#FBFBFB"> 
+      <table cellspacing="{TABLESPACE}" cellpadding="0" border="0" width="100%" align="center">
+        <tr class="mediumtxt">
+          <td class="smalltxt"> {lang index_your} {lang credit_title} <span class="bold">$credit</span> 
+            {lang credit_unit} / {lang index_status}: <span class="bold">$grouptitle</span> 
+            <br>
+            {lang timenow} $currenttime<br>{lang your_lastvisit} $lastvisittime 
+          </td>
+          <td align="right" nowrap class="smalltxt"> {lang total} <span class="bold">$threads</span> 
+            {lang index_threads} / <span class="bold">$posts</span> {lang index_posts} 
+            / <span class="bold">$totalmembers</span> {lang index_members}<br>
+            <a href="search.php?srchfrom=$newthreads&searchsubmit=yes">{lang show_newthreads}</a> 
+            | <a href="member.php?action=markread">{lang mark_read}</a> 
+            <!--{if $discuz_user}-->
+            | <a href="search.php?srchuname=$discuz_userenc&srchfrom=604800&searchsubmit=yes">{lang 
+            show_mytopics}</a> 
+            <!--{/if}-->
+            <br>
+            {lang welcome_newmember} <a href="viewpro.php?username=$memberenc"><span class="bold">$lastmember</span></a><br> 
+          </td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+<br>
+<!--{if empty($gid)}-->
+<table border="0" cellspacing="0" cellpadding="0" width="{TABLEWIDTH}" bgcolor="{BORDERCOLOR}" align="center">
+	<tr><td>
+	<table border="0" cellspacing="{BORDERWIDTH}" cellpadding="{TABLESPACE}" width="100%">
+	<tr class="header"><td colspan="3">$bbname {lang index_announcements}</td></tr>
+	<tr bgcolor="{ALTBG2}" align="center">
+	<td colspan="3" align="center">
+	<!--{if empty($announcements)}-->
+		{lang index_noannouncement}
+	<!--{else}-->
+		<marquee direction="left" scrollamount="3" onMouseOver="this.stop();" onMouseOut="this.start();">
+		$announcements
+		</marquee>
+	<!--{/if}-->
+	</td></tr></table></td></tr></table>
+<!--{/if}-->
+
+<!--{if !empty($newpmexists)}-->
+	{template pmprompt}
+<!--{/if}-->
+
+<!--{loop $forumlist $key $forum}-->
+	<!--{if $forum['type'] == 'group' && $forumlist[($key + 1)]['type'] == 'forum'}-->
+		<!--{if $key}--></table></td></tr></table><br><!--{else}--><br><!--{/if}-->
+		<table cellspacing="0" cellpadding="0" border="0" width="{TABLEWIDTH}" align="center"> 
+		<tr><td bgcolor="{BORDERCOLOR}"> 
+		<table border="0" cellspacing="{BORDERWIDTH}" cellpadding="{TABLESPACE}" width="100%" align="center"> 
+		<tr>
+          <td colspan="6" class="header"><a href="index.php?gid=$forum[fid]"><font color="{HEADERTEXT}"><span class="bold">$forum[name]</span></font></a></td>
+        </tr>
+		<tr class="category"> 
+          <td width="5%" align="center">&nbsp;</td>
+		  <td width="46%" align="center">{lang forum_name}</td>
+		  <td width="8%" align="center">{lang forum_threads}</td>
+		  <td width="8%" align="center">{lang forum_posts}</td>
+		  <td width="15%" align="center">{lang forum_lastpost}</td>
+		  <td width="18%" align="center">{lang forum_moderators}</td>
+		</tr>
+	<!--{elseif $forum['permission']}-->
+		<tr> 
+          <td align="center" bgcolor="{ALTBG1}">$forum[folder]</td>
+		<td bgcolor="{ALTBG2}" align="left" onMouseOver ="this.style.backgroundColor='{ALTBG1}'" onMouseOut ="this.style.backgroundColor='{ALTBG2}'">
+		$forum[icon]<a href="forumdisplay.php?fid=$forum[fid]"><span class="bold">$forum[name]</span></a>
+		<br><span class="smalltxt">$forum[description]</span></td>
+		  <td align="center" bgcolor="{ALTBG1}">$forum[threads]</td>
+		  <td align="center" bgcolor="{ALTBG2}">$forum[posts]</td>
+		  <td align="center" bgcolor="{ALTBG1}"> 
+            <!--{if $forum['permission'] == 1}-->
+            {lang private_forum} 
+            <!--{else}-->
+            <!--{if is_array($forum['lastpost'])}-->
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+				<tr><td align="right" class="smalltxt" title="{lang title}: $forum[lastpost][0]" nowrap>
+				$forum[lastpost][1]<br>by $forum[lastpost][2]</td>
+				<td nowrap>&nbsp;<a href="redirect.php?fid=$forum[fid]&goto=lastpost"><img src="{IMGDIR}/lastpost.gif" border="0"></a></td>
+				</tr></table>
+			<!--{else}-->
+				{lang never}
+			<!--{/if}-->
+		<!--{/if}-->
+
+		</td>
+          <td align="center" bgcolor="{ALTBG2}" style="word-break: keep-all">$forum[moderator]</td>
+		</tr>
+	<!--{/if}-->
+<!--{/loop}-->
+
+<!--{if empty($gid) && ($_DCACHE['forumlinks'] || $whosonlinestatus)}-->
+<!--{if empty($forumlist)}--><br><!--{else}--></table></td></tr></table><br><!--{/if}-->
+	<table cellspacing="0" cellpadding="0" border="0" width="{TABLEWIDTH}" align="center"> 
+	<tr><td bgcolor="{BORDERCOLOR}"> 
+	<table border="0" cellspacing="{BORDERWIDTH}" cellpadding="{TABLESPACE}" width="100%" align="center">
+	
+<!--{/if}-->
+
+<!--{if empty($gid) && $_DCACHE['forumlinks']}-->
+	<tr><td colspan="6" class="header"> <span class="bold">{lang board_links}</span></td></tr>
+<!--{loop $_DCACHE['forumlinks'] $flink}-->
+                <!--{if $flink['type'] == 1}-->
+                        <tr>
+                        <td bgcolor="{ALTBG1}" width="5%" align="center" valign="middle"><img src="{IMGDIR}/forumlink.gif"></td>
+                        <td bgcolor="{ALTBG2}" width="77%" valign="middle" onMouseOver="this.style.backgroundColor='{ALTBG1}'" onMouseOut="this.style.backgroundColor='{ALTBG2}'">$flink[content]</td>
+                        <td bgcolor="{ALTBG2}" width="18%" align="center" valign="middle"><img src="$flink[logo]" border="0"></a></td>
+                        </tr>
+                <!--{elseif $flink['type'] == 2}-->
+                        <tr>
+                        <td bgcolor="{ALTBG1}" width="5%" align="center" valign="middle"><img src="{IMGDIR}/forumlink.gif"></td>
+                        <td bgcolor="{ALTBG2}" width="95%" colspan="5" valign="middle" style="word-break: keep-all" onMouseOver="this.style.backgroundColor='{ALTBG1}'" onMouseOut="this.style.backgroundColor='{ALTBG2}'">&nbsp; $flink[content]</td>
+						
+                        </tr>
+                <!--{else}-->
+                        <tr>
+                        <td bgcolor="{ALTBG1}" width="5%" align="center" valign="middle"><img src="{IMGDIR}/forumlink.gif"></td>
+                        <td bgcolor="{ALTBG2}" width="95%" colspan="5" valign="middle" style="word-break: keep-all" onMouseOver="this.style.backgroundColor='{ALTBG1}'" onMouseOut="this.style.backgroundColor='{ALTBG2}'">&nbsp; $flink[content]</td>
+						
+						</tr>
+                <!--{/if}-->
+        <!--{/loop}-->
+<!--{/if}-->
+
+<!--{if empty($gid) && $whosonlinestatus}-->
+	<tr><td colspan="6" class="header">
+	<table cellspacing="0" cellpadding="0" border="0" width="100%" align="center">
+	<tr class="smalltxt" style="color: {HEADERTEXT}"><td> <span class="bold"><a href="member.php?action=online" style="color: {HEADERTEXT}">{lang index_activemembers}</a></span> - 
+	<a name="#online"></a>
+	<!--{if $detailstatus}-->
+		&nbsp;<span class="bold">$membercount</span> {lang index_members}, <span class="bold">$guestcount</span> {lang index_guests}. {lang total} <span class="bold">$onlinenum</span> {lang onlines} | {lang index_mostonlines} <span class="bold">$onlineinfo[0]</span> {lang on} <span class="bold">$onlineinfo[1]</span>.</td>
+		<td align="right"><a href="index.php?showoldetails=no#online" style="color: {HEADERTEXT}">[{lang index_hideonlinedetails}]</a></td>
+	<!--{else}-->
+		&nbsp;{lang total} <span class="bold">$onlinenum</span> {lang onlines} | {lang index_mostonlines} <span class="bold">$onlineinfo[0]</span> {lang on} <span class="bold">$onlineinfo[1]</span>.</td>
+		<td align="right"><a href="index.php?showoldetails=yes#online" style="color: {HEADERTEXT}">[{lang index_showonlinedetails}]</a></td>
+	<!--{/if}-->
+	</tr></table></tr><tr>
+	<td bgcolor="{ALTBG1}" width="5%" align="center"><img src="{IMGDIR}/online.gif"></td>
+	<td bgcolor="{ALTBG2}" colspan="5" onMouseOver ="this.style.backgroundColor='{ALTBG1}'" onMouseOut ="this.style.backgroundColor='{ALTBG2}'">
+	<table cellspacing="0" cellpadding="0" border="0" width="98%" align="center" class="smalltxt">
+	<tr><td colspan="6" valign="middle">
+	<img src="{IMGDIR}/online_admin.gif"> {lang admin} &nbsp; &nbsp; &nbsp;
+	<img src="{IMGDIR}/online_supermod.gif"> {lang supermod} &nbsp; &nbsp; &nbsp;
+	<img src="{IMGDIR}/online_moderator.gif"> {lang moderator} &nbsp; &nbsp; &nbsp;
+	<img src="{IMGDIR}/online_member.gif"> {lang member}</td></tr>
+
+	<!--{if $detailstatus}-->
+		<tr><td colspan="7"><hr noshade size="0" width="100%" color="{BORDERCOLOR}" align="center"></td></tr><tr><td nowrap>
+		<!--{if $whosonline}-->
+			<!--{loop $whosonline $key $online}-->
+				<!--{if $key % 7 == 0}--></td></tr><tr><td width="15%" nowrap><!--{else}--></td><td width="15%" nowrap><!--{/if}-->
+				<img src="{IMGDIR}/$online[icon]" align="absmiddle">
+				<a href="viewpro.php?username=$online[usernameenc]" title="{lang time}: $online[lastactivity]{LF}
+				{lang action}: $online[action]
+				<!--{if $online['fid']}-->{LF}{lang forum}: $online[fid]<!--{/if}-->
+				">$online[username]</a>
+			<!--{/loop}-->
+		<!--{else}-->
+			&nbsp; &nbsp; {lang online_only_guests}
+		<!--{/if}-->
+	<!--{/if}-->
+	</td></tr></table></td></tr>
+<!--{/if}-->
+
+</table></td></tr></table><br>
+<table width="{TABLEWIDTH}" align="center">
+<tr class="mediumtxt" ><td align="center" class="smalltxt">
+<img src="{IMGDIR}/red_forum.gif" align="absmiddle">&nbsp; {lang forum_newposts}&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+<img src="{IMGDIR}/forum.gif" align="absmiddle">&nbsp; {lang forum_nonewpost}</td></tr></table><br>
+{template footer}

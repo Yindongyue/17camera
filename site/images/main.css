@@ -1,0 +1,51 @@
+.main {
+	font-size: 9pt;
+	color: #666666;
+	text-decoration: none;
+}
+.black {
+	font-size: 9pt;
+	color: #000000;
+	text-decoration: none;
+}
+a:hover {
+	color: #66CC33;
+	text-decoration: none;
+
+}
+.orange {
+	font-size: 9pt;
+	color: #FF6600;
+	text-decoration: none;
+}
+.blue {
+	font-size: 9pt;
+	color: #51B2F7;
+	text-decoration: none;
+}
+.da01 {
+	font-size: 13px;
+	color: #6699FF;
+	text-decoration: none;
+}
+.zi {
+	font-size: 9pt;
+	line-height: 18px;
+	color: #666666;
+	text-decoration: none;
+}
+.green {
+	font-size: 9pt;
+	color: #339900;
+	text-decoration: none;
+}
+.da02 {
+	font-size: 13px;
+	color: #2F5CA6;
+	text-decoration: none;
+}
+.white {
+	font-size: 9pt;
+	color: #FFFFFF;
+	text-decoration: none;
+}

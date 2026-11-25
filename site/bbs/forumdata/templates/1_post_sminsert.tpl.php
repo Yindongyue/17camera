@@ -1,0 +1,5 @@
+<? if(!defined('IN_DISCUZ')) exit('Access Denied'); if($smileyinsert) { ?>
+<table cellpadding="3" cellspacing="1" border="0" bgcolor="<?=ALTBG1?>" style="border-width: 2px; border-style: outset" align="center">
+<tr><td colspan="<?=$smcols?>" align="center" bgcolor="<?=ALTBG1?>" style="border-width:1px; border-style:inset">Smilies</td></tr>
+<tr align='center'><?=$smilies?></tr></table>
+<? } ?>

@@ -1,0 +1,17 @@
+body {  font-family: "宋体"; font-size: 12px}
+td {  font-family: "宋体"; font-size: 12px}
+.big {  font-family: "Tahoma", "宋体"; font-size: 14px}
+a:visited {  font-family: "宋体", "Tahoma"; color: #000000; text-decoration: none}
+a:link {  color: #000000; text-decoration: none}
+a:hover {  color: #ff0000; text-decoration: underline}
+a.b:active {  color: #FFFFFF; text-decoration: none}
+a.b:link {  color: #FFFFFF; text-decoration: none}
+a.b:visited {  color: #000000; text-decoration: none}
+a.b:hover {  color: #000000; text-decoration: underline}
+.h {  font-family: "宋体"; font-size: 12px; clip:   rect(   ); line-height: 18px}
+.copy {  font-family: "Tahoma"; font-size: 9px}
+<style type="text/css">
+<!--
+body {CURSOR: url('1.ani')}
+-->
+</style>

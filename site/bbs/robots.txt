@@ -1,0 +1,14 @@
+#
+# robots.txt for 17camera! Board
+# Version 2.0 COML
+#
+
+User-agent: *
+Disallow: /admin
+Disallow: /attachments
+Disallow: /images
+Disallow: /forumdata
+Disallow: /include
+Disallow: /ipdata
+Disallow: /templates
+Disallow: /plugins

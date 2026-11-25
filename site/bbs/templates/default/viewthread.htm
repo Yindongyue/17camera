@@ -1,0 +1,226 @@
+{template header}
+<table cellspacing="0" cellpadding="0" border="0" width="{TABLEWIDTH}" align="center" style="table-layout: fixed"> 
+<tr><td class="nav" width="90%" nowrap>&nbsp;<a href="index.php">$bbname</a> $navigation</td>
+<td align="right" width="10%"><a href="#bottom"><img src="{IMGDIR}/arrow_dw.gif" border="0" align="absmiddle"></a></td>
+</tr></table><br>
+
+<!--{if $polloptions}-->
+	{template viewthread_poll}
+<!--{/if}-->
+
+<!--{if $newpmexists}-->
+	{template pmprompt}
+<!--{/if}-->
+
+<form name="delpost" method="post" action="topicadmin.php?action=delpost&fid=$fid&tid=$tid&page=$page">
+<table width="{TABLEWIDTH}" cellspacing="0" cellpadding="0" align="center">
+<tr><td class="multi">$multipage
+<!--{if $thread[creditsrequire]}--> &nbsp; {lang creditsrequire_view} {lang credit_title} <span class=\"bold\">$thread[creditsrequire]</span> {lang credit_unit}<!--{/if}-->
+</td><td align="right"><a href="post.php?action=newthread&fid=$fid"><img src="{IMGDIR}/newtopic.gif" border="0"></a>
+
+<!--{if $allowpostpoll}-->&nbsp;<a href="post.php?action=newthread&fid=$fid&poll=yes"><img src="{IMGDIR}/poll.gif" border="0"></a><!--{/if}-->
+<!--{if !$thread[closed] || ($thread[closed] && !$ismoderator)}-->&nbsp;<a href="post.php?action=reply&fid=$fid&tid=$tid"><img src="{IMGDIR}/reply.gif" border="0"></a><!--{/if}-->
+
+</td></tr></table>
+
+<table cellspacing="0" cellpadding="0" border="0" width="{TABLEWIDTH}" align="center">
+<tr><td bgcolor="{BORDERCOLOR}">
+
+<table border="0" cellspacing="{BORDERWIDTH}" cellpadding="{TABLESPACE}" width="100%">
+<tr class="header"><td width="21%">{lang author}:</td>
+
+<td><table cellspacing="0" cellpadding="0" border="0" width="100%" class="smalltxt" style="table-layout: fixed; word-wrap: break-word">
+<tr style="color: {HEADERTEXT}"><td class="bold">{lang subject}: $thread[subject]</td>
+<td align="right" width="150" nowrap>
+<!--{if $highlightstatus}--><a href="viewthread.php?tid=$tid&page=$page" style="color: {HEADERTEXT};font-weight: normal">{lang disable_highlight}</a> | <!--{/if}-->
+<a href="redirect.php?fid=$fid&tid=$tid&goto=nextoldset" style="color: {HEADERTEXT};font-weight: normal">{lang last_thread}</a> | 
+<a href="redirect.php?fid=$fid&tid=$tid&goto=nextnewset" style="color: {HEADERTEXT};font-weight: normal">{lang next_thread}</a></td>
+</tr></table></td>
+
+</tr></table></td></tr></table>
+
+<!--{loop $postlist $post}-->
+	<a name="pid$post[pid]"><table cellspacing="0" cellpadding="0" border="0" width="{TABLEWIDTH}" align="center">
+	<tr><td bgcolor="{BORDERCOLOR}">
+	<table border="0" cellspacing="{BORDERWIDTH}" cellpadding="{TABLESPACE}" width="100%" style="table-layout: fixed; word-wrap: break-word">
+	<tr bgcolor="$post[thisbg]">
+	<td valign="top" width="21%">
+	<!--{if $ismoderator}--><a href="topicadmin.php?action=getip&fid=$fid&tid=$tid&pid=$post[pid]"><img src="{IMGDIR}/ip.gif" border="0" align="right" alt="{lang admin_getip}"></a><!--{/if}-->
+	<!--{if $post['author'] == 'Guest'}-->
+		<span class="bold"">{lang guest}</span><br><span class="smalltxt">{lang unregistered}
+	<!--{elseif !$post['username']}-->
+		<span class="bold"">$post[author]</span><br><span class="smalltxt">{lang member_deleted}
+	<!--{else}-->
+		<span class="bold"">$post[author]</span><br><span class="smalltxt">$post[authortitle]
+	<!--{/if}-->
+	<br>$post[stars]<br><br>
+	<!--{if $post['avatar']}-->
+		<table width="95%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed">
+		<tr><td align="center">$post[avatar]</td></tr></table><br>
+	<!--{else}-->
+		<br><br>
+	<!--{/if}-->
+	{lang credit_title} $post[credit]<br>
+	{lang postnum} $post[postnum]<br>
+	{lang gender}&nbsp;
+	<!--{if $post['gender'] == 1}-->{lang male}
+		<!--{elseif $post['gender'] }-->{lang female}
+		<!--{else}-->{lang secret}
+	<!--{/if}--><br>
+	{lang regtime} $post[regdate]
+	<!--{if $post[location]}--><br>{lang location} $post[location]<!--{/if}--><br>
+	<!--{if $vtonlinestatus && $post['author'] != 'Guest'}-->
+		<!--{if $timestamp - $post['lastvisit'] <= 5 * $onlinehold}-->
+			{lang online_status} <b>{lang online}</b>
+		<!--{else}-->
+			{lang online_status} {lang offline}
+		<!--{/if}-->
+	<!--{/if}-->
+	</span>
+	</td>
+	<td height="100%">
+	<table height="100%" width="100%" border="0" cellspacing="0" cellpadding="0" style="table-layout: fixed;word-wrap: break-word">
+	<tr><td valign="top">$post[karma]
+	<span class="bold"><span class="smalltxt">$post[subject]</span></span>
+	$post[message]
+
+	<!--{if $post['aaid']}-->
+		<br><br>$post[attachicon] 
+		<!--{if $post['attachimg'] == 0}-->
+			&nbsp;{lang attachment}: <a href="attachment.php?aid=$post[aaid]" target="_blank">$post[filename]</a> ($post[attachsize])<br><span class="smalltxt">{lang attach_download_count} $post[downloads]
+			<!--{if $post[creditsrequire]}-->, {lang creditsrequire_attach} {lang credit_title} $post[creditsrequire] {lang credit_unit}<!--{/if}--></span><br>
+		<!--{elseif $post['attachimg'] == 1}-->
+			&nbsp;{lang attach_img}: <br><br><a href="$attachurl/$post[attachment]" target="_blank"><img src="$attachurl/$post[attachment]" border="0" alt="{lang click_open_newwindow}" onload="javascript:if(this.width>screen.width-333) this.width=screen.width-333"></a>
+		<!--{elseif $post['attachimg'] == 2}-->
+			&nbsp;{lang attach_swf}: <br><br><embed width="400" height="300" src="$attachurl/$post[attachment]" type="application/x-shockwave-flash"></embed>
+		<!--{/if}-->
+	<!--{/if}-->
+
+	<!--{if $post[signature]}--><br><br></td></tr><tr><td valign="bottom"><img src="images/common/sigline.gif"><br>$post[signature]<!--{/if}-->
+	</td></tr></table>
+	</td></tr>
+	<tr bgcolor="$post[thisbg]"><td valign="middle">
+	<table border="0" cellspacing="0" cellpadding="0" width="100%" class="smalltxt"><tr><td>
+	<!--{if $ismoderator}--><input type="checkbox" name="delete[]" value="$post[pid]"><!--{/if}-->
+	<!--{if $post[icon]}--><img src="{SMDIR}/$post[icon]" align="absmiddle"><!--{else}--><img src="{IMGDIR}/lastpost.gif" align="absmiddle"><!--{/if}-->
+	$post[dateline]</td><td align="right"><span class="bold" align="right">#$post[number]</span></td></tr></table></td><td valign="middle">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr class="smalltxt"><td align="left">
+	<!--{if $post[author] != 'Guest'}-->
+		<a href="viewpro.php?username=$post[authorenc]"><img src="{IMGDIR}/profile.gif" border="0" alt="{lang view_profile}"></a>&nbsp;
+		<!--{if $post[showemail]}--><a href="mailto:$post[email]"><img src="{IMGDIR}/email.gif" border="0" alt="{lang send_mail}"></a>&nbsp;<!--{/if}-->
+		<!--{if $post[site]}--><a href="$post[site]" target="_blank"><img src="{IMGDIR}/site.gif" border="0" alt="{lang visit_home}"></a>&nbsp;<!--{/if}-->
+		<a href="search.php?srchuname=$post[authorenc]&srchfid=all&srchfrom=0&searchsubmit=yes"><img src="{IMGDIR}/find.gif" border="0" alt="{lang search_member_posts}"></a>&nbsp;
+		<a href="pm.php?action=send&username=$post[authorenc]" target="_blank"><img src="{IMGDIR}/pm.gif" border="0" alt="{lang send_pm}"></a>&nbsp;
+		<!--{if $post[oicq]}--><a href="http://search.tencent.com/cgi-bin/friend/user_show_info?ln=$post[oicq]" target="_blank"><img src="{IMGDIR}/oicq.gif" alt="OICQ" border="0"></a>&nbsp;<!--{/if}-->
+		<!--{if $post[icq]}--><a href="http://wwp.icq.com/scripts/search.dll?to=$post[icq]" target="_blank"><img src="http://web.icq.com/whitepages/online?icq=$post[icq]&img=5" alt="ICQ {lang online_status}" border="0"></a>&nbsp;<!--{/if}-->
+		<!--{if $post[yahoo]}--><a href="http://edit.yahoo.com/config/send_webmesg?.target=$post[yahoo]&.src=pg" target="_blank"><img src="{IMGDIR}/yahoo.gif" alt="Yahoo" border="0"></a>&nbsp;<!--{/if}-->
+	<!--{/if}-->
+	</td><td align="right">
+	&nbsp;<a href="post.php?action=edit&fid=$fid&tid=$tid&pid=$post[pid]&page=$page"><img src="{IMGDIR}/edit.gif" border="0" alt="{lang edit_post}"></a>
+	<!--{if !$thread['closed'] || $ismoderator}-->&nbsp;<a href="post.php?action=reply&fid=$fid&tid=$tid&repquote=$post[pid]"><img src="{IMGDIR}/quote.gif" border="0" alt="{lang reply_quote}"></a><!--{/if}-->
+	<!--{if $discuz_user && $reportpost}-->&nbsp;<a href="misc.php?action=report&fid=$fid&tid=$tid&pid=$post[pid]"><img src="{IMGDIR}/report.gif" border="0" alt="{lang report_to_moderator}"></a><!--{/if}-->
+	<!--{if $allowkarma && $maxkarmarate}-->
+		&nbsp;<select name="fid" onchange="if(this.options[this.selectedIndex].value != '') {
+		window.location=('misc.php?action=karma&tid=$tid&pid=$post[pid]&username=$post[authorenc]&score='+this.options[this.selectedIndex].value+'&sid=$sid') }" align="absmiddle">
+		<option value="">{lang rate}</option>
+		<option value="">----</option>
+		$karmaoptions
+		</select>
+	<!--{/if}-->
+
+	</td></tr></table>
+	</td></tr>
+	</table>
+	</td></tr></table></a>
+<!--{/loop}-->
+
+<table width="{TABLEWIDTH}" cellspacing="0" cellpadding="0" align="center">
+<tr>
+<td class="multi" valign="top">$multipage</td><td align="right"><br>
+<a href="post.php?action=newthread&fid=$fid"><img src="{IMGDIR}/newtopic.gif" border="0"></a>
+<!--{if $allowpostpoll}-->&nbsp;<a href="post.php?action=newthread&fid=$fid&poll=yes"><img src="{IMGDIR}/poll.gif" border="0"></a><!--{/if}-->
+<!--{if !$thread[closed] || ($thread[closed] && !$ismoderator)}-->&nbsp;<a href="post.php?action=reply&fid=$fid&tid=$tid"><img src="{IMGDIR}/reply.gif" border="0"></a><!--{/if}-->
+</td></tr></table></form>
+
+<br><table width="310" cellspacing="0" cellpadding="0" align="center">
+<td align="center" bgcolor="{BORDERCOLOR}" width="30%">
+<table border="0" cellspacing="{BORDERWIDTH}" width="100%">
+<tr><td bgcolor="{ALTBG2}" align="center" class="smalltxt" nowrap>
+<a href="viewthread.php?fid=$fid&tid=$tid&action=printable" target="_blank">{lang thread_printable}</a> | 
+<a href="misc.php?action=emailfriend&tid=$tid">{lang thread_email_friend}</a> | 
+<a href="memcp.php?action=subscriptions&subadd=$tid">{lang thread_subscribe}</a> | 
+<a href="memcp.php?action=favorites&favadd=$tid">{lang thread_favorite}</a>
+</td></tr></table></td></tr></table><br>
+
+
+<!--{if $fastpost}-->
+	<script language="JavaScript">
+	var postmaxchars = $maxpostsize;
+	var isadmin = $isadmin;
+	function validate(theform) {
+	        if (theform.message.value == "" && theform.subject.value == "") {
+                	alert("{lang post_subject_and_message_isnull}");
+                	return false; }
+        	if (postmaxchars != 0 && isadmin != 1) {
+	                if (theform.message.value.length > $maxpostsize) {
+                        	alert("{lang post_message_toolong}\n\n{lang post_currlength}: "+theform.message.value.length+" {lang bytes}\n{lang board_allowed}: $maxpostsize {lang bytes}");
+                        	return false; }
+                	else { return true; }
+        	} else { return true; }
+	}
+	</script>
+	<form method="post" name="input" action="post.php?action=reply&fid=$fid&tid=$tid" onSubmit="return validate(this)">
+	<input type="hidden" name="replysubmit" value="submit">
+	<table cellspacing="0" cellpadding="0" border="0" width="{TABLEWIDTH}" align="center" bgcolor="{BORDERCOLOR}"><tr><td>
+	<table border="0" cellspacing="{BORDERWIDTH}" cellpadding="{TABLESPACE}" width="100%">
+	<tr><td colspan="2" class="header">{lang post_fastreply}</td></tr>
+	<tr>
+	<td width="18%" bgcolor="{ALTBG1}">{lang subject}:</td>
+	<td width="82%" bgcolor="{ALTBG2}" class="smalltxt"><input type="text" name="subject" size="80" value="" tabindex="1"> &nbsp; ({lang optional_info})</td>
+	</tr>
+	<tr>
+	<td width="18%" bgcolor="{ALTBG1}" valign="top">{lang options}:<br><span class="smalltxt">
+	<input type="checkbox" name="parseurloff" value="1"> {lang disable} {lang post_parseurl}<br>
+	<input type="checkbox" name="smileyoff" value="1"> {lang disable} <a href="faq.php?page=messages#6" target="_blank">{lang post_smilies}</a><br>
+	<input type="checkbox" name="bbcodeoff" value="1"> {lang disable} <a href="faq.php?page=misc#1" target="_blank">{lang post_discuzcode}</a><br>
+	<input type="checkbox" name="usesig" value="1" $usesigcheck> {lang post_show_sig}<br>
+	<input type="checkbox" name="emailnotify" value="1"> {lang post_email_notify}</span>
+	</td>
+	<td width="82%" bgcolor="{ALTBG2}" class="smalltxt"><textarea rows="7" cols="90" name="message" onKeyDown="javascript: ctlent();" tabindex="2"></textarea><br>
+	<input type="submit" name="replysubmit" value="{lang post_topicsubmit}" tabindex="3">&nbsp;&nbsp;&nbsp;
+	<input type="submit" name="previewpost" value="{lang post_previewpost}" tabindex="4">&nbsp;&nbsp;&nbsp;
+	<input type="reset" name="topicsreset" value="{lang post_topicreset}" tabindex="5">&nbsp; &nbsp;{lang post_submit_hotkey}</td>
+	</tr></table></td></tr></table></form>
+<!--{/if}-->
+
+<br><table width="{TABLEWIDTH}" cellspacing="0" cellpadding="0" align="center">
+<tr class="mediumtxt"><td align="left" class="smalltxt">
+<span class="bold">{lang forum_jump}:</span>
+<select onchange="if(this.options[this.selectedIndex].value != '') {
+window.location=('forumdisplay.php?fid='+this.options[this.selectedIndex].value+'&sid=$sid') }">
+$forumselect
+</select>
+</td><td align="right" class="smalltxt">
+
+<!--{if $ismoderator}-->
+	<span class="bold">{lang admin_modoptions}:</span>
+	<select name="action" id="action" onchange="if(this.options[this.selectedIndex].value != '') { if(this.options[this.selectedIndex].value != 'delpost') {
+	window.location=('topicadmin.php?tid=$tid&fid=$fid&action='+this.options[this.selectedIndex].value+'&sid=$sid');
+	} else { this.document.delpost.submit(); } }">
+	<option value="" selected>{lang admin_modoptions}</option>
+	<option value="delpost">{lang admin_delpost}</option>
+	<option value="delete">{lang admin_delthread}</option>
+	<option value="close"><!--{if $thread[closed]}-->{lang admin_open}<!--{else}-->{lang admin_close}<!--{/if}--></option>
+	<option value="move">{lang admin_move}</option>
+	<option value="digest"><!--{if $thread[digest]}-->{lang admin_digest_remove}<!--{else}-->{lang admin_digest_add}<!--{/if}--></option>
+	<option value="top"><!--{if $thread[topped]}-->{lang admin_unstick}<!--{else}-->{lang admin_stick}<!--{/if}--></option>
+	<option value="split">{lang admin_split}</option>
+	<option value="merge">{lang admin_merge}</option>
+	<option value="bump">{lang admin_bump}</option>
+	</select>
+<!--{/if}-->
+
+</td>
+</tr></table><br><br>
+{template footer}

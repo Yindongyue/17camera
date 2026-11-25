@@ -1,0 +1,39 @@
+<? if(!defined('IN_DISCUZ')) exit('Access Denied'); ?>
+
+
+</td>
+              </tr>
+              <tr> 
+                <td height="108" valign="bottom"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr> 
+                      <td width="90"><img src="images/artery-3_imags/foot-1.gif" width="90" height="89"></td>
+                      <td>
+  <center>
+            <span class="mediumtxt"> [ <a href="mailto:<?=$adminemail?>" class="mediumtxt">联系我们</a> - <a href="<?=$siteurl?>" class="mediumtxt" target="_blank"><?=$sitename?></a> 
+            ]</span> <br>
+            <span style="color: <?=TEXT?>; font-size: 11px; font-family: Tahoma, Arial">
+Powered by <a href="" style="color: <?=TEXT?>" target="_blank"><b>17camera!</b> </a>
+&copy;2003-2004, <a href="http://17camera.com" target="_blank" style="color: <?=TEXT?>"></a>
+<? updatesession(); debuginfo(); ?>
+</span></center>
+  
+  </td>
+                      <td width="90"><img src="images/artery-3_imags/foot-2.gif" width="90" height="89"></td>
+                    </tr>
+                    <tr> 
+                      <td><img src="images/artery-3_imags/foot-3.gif" width="90" height="19"></td>
+                      <td><img src="images/artery-3_imags/foot-4.gif" width="562" height="19"></td>
+                      
+        <td><a href="http://www.d-show.net" target="_blank"><img src="images/artery-3_imags/foot-5.gif" alt="D-SHOW.net" width="90" height="19" border="0"></a></td>
+                    </tr>
+                  </table></td>
+              </tr>
+            </table></td>
+          <td width="19" valign="bottom" background="images/artery-3_imags/right-bg.gif"><img src="images/artery-3_imags/right-bg_1.gif" width="19" height="19"></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+<a name="#bottom"></a>
+</body></html>
+<? discuz_output(); ?>
