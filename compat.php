@@ -381,6 +381,38 @@ function session_is_registered($name)
     return isset($_SESSION[$name]);
 }
 
+/* ---------- UTF-8 safe title truncation (legacy pages) ---------- */
+if (!function_exists('yiqi_cut')) {
+    function yiqi_cut($str, $width = 30, $marker = '……')
+    {
+        $str = (string)$str;
+        if ($str === '') {
+            return '';
+        }
+        if (!preg_match_all('/./us', $str, $m)) {
+            $str = @iconv('UTF-8', 'UTF-8//IGNORE', $str);
+            if (!preg_match_all('/./us', $str, $m)) {
+                return '';
+            }
+        }
+        $out = '';
+        $used = 0;
+        foreach ($m[0] as $ch) {
+            $w = (strlen($ch) > 1) ? 2 : 1;
+            if ($used + $w > $width) {
+                $trimmed = preg_replace('/[\s&＆,，、;；:：\-—–_+|\/]+$/u', '', $out);
+                if ($trimmed !== null) {
+                    $out = $trimmed;
+                }
+                return $out . $marker;
+            }
+            $out .= $ch;
+            $used += $w;
+        }
+        return $str;
+    }
+}
+
 function mb_eregi($pattern, $string, &$regs = null)
 {
     return eregi($pattern, $string, $regs);

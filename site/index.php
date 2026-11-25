@@ -395,7 +395,7 @@ MM_reloadPage(true);
                                                                 <td width="8%" height="16" align="center"><img src="images/shortcut_arrow.gif" width="12" height="11"></td>
                                                                 <td width="92%" height="18" valign="bottom" class="main"><A HREF="news/moban_zx.php?n_id=<?     echo $rsn["n_id"]; ?>&b_id=<?     echo $rsn["b_id"]; ?>" target="_blank" class="main"> 
                                                                    <? if (strlen($rsn["n_title"])>30){																	
-																		  print substr($rsn["n_title"],0,30)."...";
+																		  print yiqi_cut($rsn["n_title"],30);
 																		}else{																	
 																		  print $rsn["n_title"];
 																		} 																	
@@ -450,7 +450,7 @@ MM_reloadPage(true);
                                                                 <td width="8%" height="16" align="center"><img src="images/shortcut_arrow.gif" width="12" height="11"></td>
                                                                 <td width="92%" height="18" valign="bottom" class="main"><A HREF="news/moban_zx.php?n_id=<?     echo $rsn["n_id"]; ?>&b_id=<?     echo $rsn["b_id"]; ?>" target="_blank" class="main"> 
                                                                   <? if (strlen($rsn["n_title"])>30) {
-																		  print substr($rsn["n_title"],0,30)."...";
+																		  print yiqi_cut($rsn["n_title"],30);
 																		} else{																	
 																		  print $rsn["n_title"];
 																		} 																	

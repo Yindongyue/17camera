@@ -374,7 +374,7 @@ $i=1; ?>
                                                           <td width="92%" valign="bottom" class="main"><A HREF="moban.php?n_id=<?   echo $rsn["n_id"]; ?>&b_id=<?   echo $rsn["b_id"]; ?>" target="_blank" class="main"> 
                                                             <? if (strlen($rsn["n_title"])>30)
 																{																	
-																  print substr($rsn["n_title"],0,30)."...";
+																  print yiqi_cut($rsn["n_title"],30);
 																}else{																	
 																  print $rsn["n_title"];
 																} 																	
@@ -450,7 +450,7 @@ $i=1; ?>
                                                           <td width="92%" valign="bottom" class="main"><A HREF="moban.php?n_id=<?   echo $rsn["n_id"]; ?>&b_id=<?   echo $rsn["b_id"]; ?>" target="_blank" class="main"> 
                                                            <? if (strlen($rsn["n_title"])>30)
 																{																	
-																  print substr($rsn["n_title"],0,30)."...";
+																  print yiqi_cut($rsn["n_title"],30);
 																}else{																	
 																  print $rsn["n_title"];
 																} 																	
@@ -553,7 +553,7 @@ $i=1; ?>
                                                     <td width="92%" valign="bottom" class="main"><A HREF="moban.php?n_id=<?   echo $rsn["n_id"]; ?>&b_id=<?   echo $rsn["b_id"]; ?>" target="_blank" class="main"> 
 														<? if (strlen($rsn["n_title"])>30)
 															{																	
-															  print substr($rsn["n_title"],0,30)."...";
+															  print yiqi_cut($rsn["n_title"],30);
 															}else{																	
 															  print $rsn["n_title"];
 															} 																	
@@ -625,7 +625,7 @@ $i=1; ?>
                                                                 <td width="92%" valign="bottom" class="main"><A HREF="moban.php?n_id=<?   echo $rsn["n_id"]; ?>&b_id=<?   echo $rsn["b_id"]; ?>" target="_blank" class="main"> 
 																  <? if (strlen($rsn["n_title"])>30)
 																		{																	
-																		  print substr($rsn["n_title"],0,30)."...";
+																		  print yiqi_cut($rsn["n_title"],30);
 																		}else{																	
 																		  print $rsn["n_title"];
 																		} 																	
@@ -754,7 +754,7 @@ $i=1; ?>
                                             <tr> 
                                               <td width="8%" align="left"><img src="../images/ball7.gif" width="6" height="18"></td>
                                               <td height="18" valign="top" class="main"><A HREF="moban.php?n_id=<?   echo $rsn["n_id"]; ?>&b_id=<?   echo $rsn["b_id"]; ?>" target="_blank" class="main"> 
-                                                <?  echo substr($rsn["n_title"],0,22)."..." ; ?>
+                                                <?  echo yiqi_cut($rsn["n_title"],22); ?>
                                                 </A> </td>
                                             </tr>
                                           </table>
@@ -805,7 +805,7 @@ $i=1; ?>
                                       <tr> 
                                         <td width="8%"><img src="../images/ball7.gif" width="6" height="18"></td>
                                         <td width="92%" height="18" valign="top" class="main"><A HREF="moban.php?n_id=<?   echo $rsn["n_id"]; ?>&b_id=<?   echo $rsn["b_id"]; ?>" target="_blank" class="main"> 
-                                          <?   echo substr($rsn["n_title"],0,22)."..." ; ?>
+                                          <?   echo yiqi_cut($rsn["n_title"],22); ?>
                                           </A> </td>
                                       </tr>
                                     </table>

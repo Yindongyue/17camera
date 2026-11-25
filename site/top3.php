@@ -20,7 +20,7 @@
           <td width="97%" background="images/topbg.gif"> <table width="724" border="0" cellspacing="0" cellpadding="0">
               <tr> 
                 <td width="1" bgcolor="#CFCFCF"></td>
-                <td width="723" height="48"><a href="" target="_blank"><img src="images/logo.gif" width="181" height="48" border="0"></a></td>
+                <td width="723" height="48"><a href="/"><img src="images/logo.gif" width="181" height="48" border="0"></a></td>
               </tr>
             </table></td>
         </tr>

@@ -337,7 +337,7 @@ $i=1; ?>
                                                               <tr> 
                                                                 <td width="8%" height="16" align="center"><img src="../images/dot2.gif" width="7" height="7"></td>
                                                                 <td width="92%" valign="bottom" class="main"><A HREF="moban_zx.php?n_id=<?   echo $rsn["n_id"]; ?>&b_id=<?   echo $rsn["b_id"]; ?>" target="_blank" class="main"> 
-                                                                  <?   echo substr($rsn["n_title"],0,20)."..." ; ?>
+                                                                  <?   echo yiqi_cut($rsn["n_title"],20); ?>
                                                                   </A> </td>
                                                               </tr>
                                                             </table>
@@ -417,7 +417,7 @@ $i=1; ?>
                                                               <tr> 
                                                                 <td width="8%" height="16" align="center"><img src="../images/dot2.gif" width="7" height="7"></td>
                                                                 <td width="92%" valign="bottom" class="main"><A HREF="moban_zx.php?n_id=<?   echo $rsn["n_id"]; ?>&b_id=<?   echo $rsn["b_id"]; ?>" target="_blank" class="main"> 
-                                                                  <?   echo substr($rsn["n_title"],0,20)."..." ; ?>
+                                                                  <?   echo yiqi_cut($rsn["n_title"],20); ?>
                                                                   </A> </td>
                                                               </tr>
                                                             </table>
