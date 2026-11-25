@@ -128,19 +128,18 @@ function ubbcode($message, $smileyoff = 0, $bbcodeoff = 0, $allowsmilies = 1, $a
 	}
 
 	if(!$bbcodeoff && $allowimgcode) {
-		if(empty($searcharray['imgcode']) || empty($replacearray['imgcode'])) {
-			$searcharray['imgcode'] = array(
-				"/\[swf\]\s*([^\[]+?)\s*\[\/swf\]/ies",
-				"/\[img\]\s*([^\[]+?)\s*\[\/img\]/ies",
-				"/\[img=(\d{1,3})[x|\,](\d{1,3})\]\s*([^\[]+?)\s*\[\/img\]/ies",
-			);
-			$replacearray['imgcode'] = array(
-				"bbcodeurl('\\1', ' <img src=\"images/attachicon/flash.gif\" align=\"absmiddle\"> <a href=\"%s\" target=\"_blank\">Flash: %s</a> ')",
-				"bbcodeurl('\\1', '<img src=\"%s\" border=\"0\" onload=\"if(this.width>screen.width-333) {this.width=screen.width-333;this.alt=\'Click Here to Open New Window\';}\" onmouseover=\"if(this.alt) this.style.cursor=\'hand\';\" onclick=\"if(this.alt) window.open(\'%s\');\">')",
-				"bbcodeurl('\\3', '<img width=\"\\1\" height=\"\\2\" src=\"%s\" border=\"0\" onload=\"if(this.width>screen.width-333) {this.width=screen.width-333;this.alt=\'Click Here to Open New Window\';}\" onmouseover=\"if(this.alt) this.style.cursor=\'hand\';\" onclick=\"if(this.alt) window.open(\'%s\');\">')",
-			);
-		}
-		$message = preg_replace($searcharray['imgcode'], $replacearray['imgcode'], $message);
+		$message = preg_replace_callback("/\[swf\]\s*([^\[]+?)\s*\[\/swf\]/is", function($m) {
+			return bbcodeurl($m[1], ' <img src="images/attachicon/flash.gif" align="absmiddle"> <a href="%s" target="_blank">Flash: %s</a> ');
+		}, $message);
+
+		$message = preg_replace_callback("/\[img\]\s*([^\[]+?)\s*\[\/img\]/is", function($m) {
+			return bbcodeurl($m[1], '<img src="%s" border="0" onload="if(this.width>screen.width-333) {this.width=screen.width-333;this.alt=\'Click Here to Open New Window\';}" onmouseover="if(this.alt) this.style.cursor=\'hand\';" onclick="if(this.alt) window.open(\'%s\');">');
+		}, $message);
+
+		$message = preg_replace_callback("/\[img=(\d{1,3})[x|\,](\d{1,3})\]\s*([^\[]+?)\s*\[\/img\]/is", function($m) {
+			$tags = '<img width="'.$m[1].'" height="'.$m[2].'" src="%s" border="0" onload="if(this.width>screen.width-333) {this.width=screen.width-333;this.alt=\'Click Here to Open New Window\';}" onmouseover="if(this.alt) this.style.cursor=\'hand\';" onclick="if(this.alt) window.open(\'%s\');">';
+			return bbcodeurl($m[3], $tags);
+		}, $message);
 	}
 
 	for($i = 0; $i <= $post_codecount; $i++) {
@@ -177,7 +176,7 @@ function urlcut($url) {
 function bbcodeurl($url, $tags) {
 	//FIX: 去除部分链接中含有的非法字符
 	if(!preg_match("/<.+?>/s",$url)) {
-		if(!in_array(strtolower(substr($url, 0, 6)), array('http:/', 'ftp://', 'rtsp:/', 'mms://'))) {
+		if(!preg_match('~^(?:https?|ftp|rtsp|mms)://|^/~i', $url)) {
 			$url = 'http://'.$url;
 		}
 		$url = str_replace(array('>', '<', '"','submit=','subscriptions','favorites'),array('', '', "&quot;",'','','' ),  urldecode($url));
