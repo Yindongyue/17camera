@@ -6,6 +6,7 @@ const express = require('express');
 const session = require('express-session');
 
 const db = require('./lib/data');
+const store = require('./lib/store');
 const ubb = require('./lib/ubb');
 const h = require('./lib/helpers');
 
@@ -51,6 +52,8 @@ app.use(
     cookie: { httpOnly: true, sameSite: 'lax', maxAge: 7 * 24 * 3600 * 1000 },
   })
 );
+
+const asyncRoute = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
@@ -190,14 +193,14 @@ app.get('/gallery/:pid(\\d+)', (req, res, next) => {
   });
 });
 
-app.post('/gallery/:pid(\\d+)/comment', (req, res) => {
+app.post('/gallery/:pid(\\d+)/comment', asyncRoute(async (req, res) => {
   const photo = db.photos.find((p) => String(p.pid) === String(req.params.pid));
   if (!photo) return res.redirect('/gallery');
   if (!req.session.user) return res.redirect('/login?next=' + encodeURIComponent(`/gallery/${photo.pid}`));
   const content = String(req.body.content || '').trim();
-  if (content) db.addComment(photo.pid, req.session.user.username, content.slice(0, 1000));
+  if (content) await db.addComment(photo.pid, req.session.user.username, content.slice(0, 1000));
   res.redirect(`/gallery/${photo.pid}#comments`);
-});
+}));
 
 app.get('/author/:username', (req, res, next) => {
   const username = req.params.username;
@@ -342,23 +345,23 @@ function requireLogin(req, res, next) {
   next();
 }
 
-app.post('/forum/thread/:tid(\\d+)/reply', requireLogin, (req, res) => {
+app.post('/forum/thread/:tid(\\d+)/reply', requireLogin, asyncRoute(async (req, res) => {
   const thread = db.threadById(req.params.tid);
   if (!thread) return res.redirect('/forum');
   const message = String(req.body.message || '').trim().slice(0, 20000);
-  if (message) db.replyThread(thread.tid, req.session.user.username, req.body.subject || '', message);
+  if (message) await db.replyThread(thread.tid, req.session.user.username, req.body.subject || '', message);
   res.redirect(`/forum/thread/${thread.tid}`);
-});
+}));
 
-app.post('/forum/:fid(\\d+)/new', requireLogin, (req, res) => {
+app.post('/forum/:fid(\\d+)/new', requireLogin, asyncRoute(async (req, res) => {
   const forum = db.forumById(req.params.fid);
   if (!forum) return res.redirect('/forum');
   const subject = String(req.body.subject || '').trim().slice(0, 120);
   const message = String(req.body.message || '').trim().slice(0, 20000);
   if (!subject || !message) return res.redirect(`/forum/${forum.fid}`);
-  const thread = db.createThread(forum.fid, req.session.user.username, subject, message);
+  const thread = await db.createThread(forum.fid, req.session.user.username, subject, message);
   res.redirect(`/forum/thread/${thread.tid}`);
-});
+}));
 
 /* ------------------------------------------------------------------ auth */
 
@@ -386,7 +389,7 @@ app.get('/register', (req, res) => {
   res.render('pages/register', { title: '注册会员', error: null, form: {} });
 });
 
-app.post('/register', (req, res) => {
+app.post('/register', asyncRoute(async (req, res) => {
   const form = {
     username: String(req.body.username || '').trim(),
     email: String(req.body.email || '').trim(),
@@ -402,10 +405,10 @@ app.post('/register', (req, res) => {
   if (!/^[\w\u4e00-\u9fa5.-]{2,32}$/.test(form.username)) return fail('用户名需为 2-32 位字母、数字、中文或 .-_ 组合。');
   if (password.length < 4) return fail('密码至少 4 位。');
   if (db.users.concat(db.state.users).some((u) => u.username === form.username)) return fail('该用户名已被注册。');
-  const user = db.createUser({ ...form, password: h.md5(password) });
+  const user = await db.createUser({ ...form, password: h.md5(password) });
   req.session.user = { username: user.username, flag: 1 };
   res.redirect('/');
-});
+}));
 
 app.post('/logout', (req, res) => {
   req.session.destroy(() => res.redirect('/'));
@@ -453,6 +456,21 @@ app.use((err, req, res, next) => {
   res.status(500).render('pages/error', { title: '出错了', code: 500, message: '服务暂时不可用，请稍后再试。' });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`yiqi archive listening on 0.0.0.0:${PORT}`);
-});
+async function start() {
+  try {
+    const persisted = await store.init();
+    if (persisted) {
+      db.hydrate(persisted);
+      console.log(`storage: ${persisted.mode} (${persisted.users.length} users, ${persisted.threads.length} threads, ${persisted.posts.length} posts, ${persisted.comments.length} comments)`);
+    } else {
+      console.log('storage: local file (ephemeral). Set DATABASE_URL for durable storage.');
+    }
+  } catch (e) {
+    console.error('database init failed, falling back to ephemeral storage:', e.message);
+  }
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`yiqi archive listening on 0.0.0.0:${PORT}`);
+  });
+}
+
+start();

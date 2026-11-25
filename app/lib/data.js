@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const store = require('./store');
 
 const DATA_DIR = path.join(__dirname, '..', 'data');
 const STATE_DIR = process.env.TMPDIR || '/tmp';
@@ -36,7 +37,7 @@ const news = load('news');
 const threads = load('threads');
 const posts = load('posts');
 
-/* ---------- mutable runtime state (ephemeral, lives in TMPDIR) ---------- */
+/* ---------- mutable runtime state (database, falls back to TMPDIR JSON) ---------- */
 
 function loadState() {
   try {
@@ -48,12 +49,22 @@ function loadState() {
 }
 
 function persist() {
+  if (store.isDatabase()) return;
   try {
     fs.mkdirSync(STATE_DIR, { recursive: true });
     fs.writeFileSync(STATE_FILE, JSON.stringify(state));
   } catch (e) {
     console.error('state persist failed:', e.message);
   }
+}
+
+function hydrate(rows) {
+  if (!rows) return;
+  state.users = rows.users || [];
+  state.threads = rows.threads || [];
+  state.posts = rows.posts || [];
+  state.comments = rows.comments || [];
+  for (const u of state.users) userIndex.set(u.username, u);
 }
 
 function nextId(rows, key) {
@@ -138,9 +149,36 @@ function hitCount(n) {
 /* forum */
 
 function threadRows() {
-  const meta = state.threadMeta || {};
-  const base = threads.map((t) => (meta[t.tid] ? { ...t, ...meta[t.tid] } : t));
-  return base.concat(state.threads);
+  const extra = new Map();
+  for (const p of state.posts) {
+    const key = String(p.tid);
+    let e = extra.get(key);
+    if (!e) {
+      e = { count: 0, lastpost: 0, lastposter: '' };
+      extra.set(key, e);
+    }
+    e.count += 1;
+    if (!e.lastpost || Number(p.dateline) >= e.lastpost) {
+      e.lastpost = Number(p.dateline);
+      e.lastposter = p.author;
+    }
+  }
+  const base = threads.map((t) => {
+    const e = extra.get(String(t.tid));
+    if (!e) return t;
+    return {
+      ...t,
+      replies: (Number(t.replies) || 0) + e.count,
+      lastpost: Math.max(Number(t.lastpost) || 0, e.lastpost),
+      lastposter: e.lastposter || t.lastposter,
+    };
+  });
+  const persisted = state.threads.map((t) => {
+    const e = extra.get(String(t.tid));
+    if (!e) return { ...t, replies: 0 };
+    return { ...t, replies: Math.max(0, e.count - 1), lastpost: e.lastpost, lastposter: e.lastposter };
+  });
+  return base.concat(persisted);
 }
 
 function postRows() {
@@ -176,7 +214,7 @@ function forumStats(fid) {
 
 /* users */
 
-function createUser({ username, password, sex, email, tele, address, web, qq, msn }) {
+async function createUser({ username, password, sex, email, tele, address, web, qq, msn }) {
   const now = new Date();
   const u = {
     userid: nextId(users.concat(state.users), 'userid'),
@@ -198,13 +236,18 @@ function createUser({ username, password, sex, email, tele, address, web, qq, ms
     status: 1,
     local: true,
   };
+  await store.insert('app_users', {
+    userid: u.userid, username: u.username, password: u.password, sex: u.sex,
+    tele: u.tele, address: u.address, email: u.email, web: u.web, flag: u.flag,
+    dat: u.dat, jhhao: u.jhhao, qq: u.qq, msn: u.msn, status: u.status,
+  });
   state.users.push(u);
   userIndex.set(u.username, u);
   persist();
   return u;
 }
 
-function addComment(pid, username, content) {
+async function addComment(pid, username, content) {
   const c = {
     id: nextId(photoReviews.concat(state.comments), 'id'),
     pid: Number(pid),
@@ -212,12 +255,13 @@ function addComment(pid, username, content) {
     username,
     dat: new Date().toISOString().replace('T', ' ').slice(0, 19),
   };
+  await store.insert('app_comments', c);
   state.comments.push(c);
   persist();
   return c;
 }
 
-function createThread(fid, author, subject, message) {
+async function createThread(fid, author, subject, message) {
   const now = Math.floor(Date.now() / 1000);
   const t = {
     tid: nextId(threadRows(), 'tid'),
@@ -234,8 +278,7 @@ function createThread(fid, author, subject, message) {
     closed: '',
     local: true,
   };
-  state.threads.push(t);
-  state.posts.push({
+  const p = {
     pid: nextId(postRows(), 'pid'),
     tid: t.tid,
     fid: t.fid,
@@ -244,16 +287,27 @@ function createThread(fid, author, subject, message) {
     dateline: now,
     message,
     local: true,
+  };
+  await store.insert('app_threads', {
+    tid: t.tid, fid: t.fid, author: t.author, subject: t.subject, dateline: t.dateline,
+    lastpost: t.lastpost, lastposter: t.lastposter, views: t.views, replies: t.replies,
+    topped: t.topped, digest: t.digest, closed: t.closed,
   });
+  await store.insert('app_posts', {
+    pid: p.pid, tid: p.tid, fid: p.fid, author: p.author, subject: p.subject,
+    dateline: p.dateline, message: p.message,
+  });
+  state.threads.push(t);
+  state.posts.push(p);
   persist();
   return t;
 }
 
-function replyThread(tid, author, subject, message) {
+async function replyThread(tid, author, subject, message) {
   const t = threadById(tid);
   if (!t) return null;
   const now = Math.floor(Date.now() / 1000);
-  state.posts.push({
+  const p = {
     pid: nextId(postRows(), 'pid'),
     tid: Number(tid),
     fid: t.fid,
@@ -262,20 +316,12 @@ function replyThread(tid, author, subject, message) {
     dateline: now,
     message,
     local: true,
+  };
+  await store.insert('app_posts', {
+    pid: p.pid, tid: p.tid, fid: p.fid, author: p.author, subject: p.subject,
+    dateline: p.dateline, message: p.message,
   });
-  if (t.local) {
-    t.replies = (Number(t.replies) || 0) + 1;
-    t.lastpost = now;
-    t.lastposter = author;
-  } else {
-    if (!state.threadMeta) state.threadMeta = {};
-    const prev = state.threadMeta[t.tid] || {};
-    state.threadMeta[t.tid] = {
-      replies: (Number(prev.replies != null ? prev.replies : t.replies) || 0) + 1,
-      lastpost: now,
-      lastposter: author,
-    };
-  }
+  state.posts.push(p);
   persist();
   return t;
 }
@@ -289,5 +335,5 @@ module.exports = {
   userOf, authorFolder, photoSrc, competeSrc, mmSrc, userAvatar, modelCover, categoryName,
   photosByAuthor, photosByCategory, commentsFor, newsById, addHit, hitCount,
   threadRows, postRows, threadsOfForum, postsOfThread, forumById, threadById, forumStats,
-  createUser, addComment, createThread, replyThread, nextId, persist,
+  createUser, addComment, createThread, replyThread, nextId, persist, hydrate,
 };
