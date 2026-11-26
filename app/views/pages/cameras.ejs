@@ -16,9 +16,11 @@
   <% } else { %>
   <div class="grid grid-4">
     <% cameras.forEach(function (c) { %>
+      <% var cameraPic = c.bpic || c.pic; %>
       <article class="photo-card">
-        <a class="thumb" href="/cameras/<%= c.id %>" style="aspect-ratio:4/3;background:#fff">
-          <img loading="lazy" src="/camera/admin/image/<%= encodeURIComponent(c.pic) %>" alt="<%= c.xingh %>" style="object-fit:contain">
+        <a class="thumb camera-thumb" href="/cameras/<%= c.id %>" style="aspect-ratio:4/3;background:#fff">
+          <span class="thumb-bg" style="background-image:url('/camera/admin/image/<%= encodeURIComponent(cameraPic) %>')"></span>
+          <img loading="lazy" src="/camera/admin/image/<%= encodeURIComponent(cameraPic) %>" alt="<%= c.xingh %>" style="object-fit:contain">
         </a>
         <div class="meta">
           <h4><a href="/cameras/<%= c.id %>"><%= c.xingh || c.name %></a></h4>

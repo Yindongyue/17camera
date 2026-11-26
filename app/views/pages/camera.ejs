@@ -6,7 +6,7 @@
       <h1 style="font-size:22px"><%= camera.xingh || camera.name %></h1>
       <div class="sub"><%= brand ? brand.sort : '' %> · 收录于 <%= h.fmtDate(camera.dat) %> · 浏览 <%= camera.hits || 0 %></div>
       <div style="text-align:center;background:#fafafa;border-radius:8px;padding:20px;margin-bottom:18px">
-        <img src="/camera/admin/image/<%= encodeURIComponent(camera.bpic || camera.pic) %>" alt="<%= camera.xingh %>" style="max-height:260px">
+        <img src="/camera/admin/image/<%= encodeURIComponent(camera.bpic || camera.pic) %>" alt="<%= camera.xingh %>" style="max-height:260px;max-width:100%;height:auto">
       </div>
       <table class="spec-table">
         <% specs.forEach(function (s) { %>

@@ -87,6 +87,15 @@ main { padding: 26px 0 50px; }
 .photo-card a.thumb { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: #eee; }
 .photo-card a.thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
 .photo-card:hover a.thumb img { transform: scale(1.04); }
+.photo-card img { image-rendering: auto; }
+/* Low-resolution catalogue GIFs: soft blurred backdrop avoids a harsh stretched look. */
+.camera-thumb { position: relative; }
+.camera-thumb .thumb-bg {
+  position: absolute; inset: 0; background-size: cover; background-position: center;
+  filter: blur(16px) saturate(1.1); opacity: .3; transform: scale(1.15);
+}
+.camera-thumb img { position: relative; z-index: 1; }
+.photo-card:hover a.camera-thumb img { transform: none; }
 .photo-card .meta { padding: 9px 11px 11px; }
 .photo-card .meta h4 { margin: 0; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .photo-card .meta .line { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 4px; gap: 8px; }
