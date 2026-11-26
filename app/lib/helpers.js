@@ -43,6 +43,11 @@ function badge(flag) {
   return BADGES[Number(flag)] || BADGES[1];
 }
 
+function initial(name) {
+  const s = String(name || '').trim();
+  return s ? s.charAt(0).toUpperCase() : '?';
+}
+
 function buildQuery(base, params) {
   const qs = Object.entries(params)
     .filter(([, v]) => v !== undefined && v !== null && v !== '')
@@ -70,4 +75,4 @@ function nl2br(text) {
   return String(text || '').replace(/\r\n|\r|\n/g, '<br>');
 }
 
-module.exports = { fmtDate, fmtDateTime, fmtUnix, cut, badge, buildQuery, paginate, md5, nl2br };
+module.exports = { fmtDate, fmtDateTime, fmtUnix, cut, badge, buildQuery, paginate, md5, nl2br, initial };

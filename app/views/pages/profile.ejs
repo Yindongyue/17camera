@@ -32,7 +32,8 @@
   <aside>
     <div class="side-card">
       <h3>个人资料</h3>
-      <% if (userAvatar(profile)) { %><img class="avatar" src="<%= userAvatar(profile) %>" alt="<%= profile.username %>"><% } %>
+      <% if (userAvatar(profile)) { %><img class="avatar" src="<%= userAvatar(profile) %>" alt="<%= profile.username %>">
+      <% } else { %><span class="avatar-ph" style="width:100%;aspect-ratio:1;font-size:32px;margin-bottom:10px"><%= h.initial(profile.username) %></span><% } %>
       <p style="font-size:13px;color:#666;margin:0">作品 <%= albums.length %> 组</p>
     </div>
   </aside>

@@ -127,8 +127,13 @@
     <% if (featuredModel) { %>
       <div class="panel" style="display:flex;gap:18px;align-items:flex-start">
         <div style="width:150px;flex:none">
+          <% var modelPic = modelImage(featuredModel); %>
           <a href="/models/<%= encodeURIComponent(featuredModel.name) %>">
-            <img src="/pic/<%= encodeURIComponent(featuredModel.jhhao) %>/<%= encodeURIComponent(featuredModel.tj_pic || '') %>" alt="<%= featuredModel.name %>" style="border-radius:8px">
+            <% if (modelPic) { %>
+              <img src="<%= modelPic %>" alt="<%= featuredModel.name %>" style="border-radius:8px">
+            <% } else { %>
+              <span class="avatar-ph" style="width:150px;height:150px;font-size:48px"><%= h.initial(featuredModel.name) %></span>
+            <% } %>
           </a>
         </div>
         <div>
@@ -149,6 +154,8 @@
         <div style="width:130px;flex:none">
           <% if (userAvatar(featuredMember)) { %>
             <img src="<%= userAvatar(featuredMember) %>" alt="<%= featuredMember.username %>" style="border-radius:8px">
+          <% } else { %>
+            <span class="avatar-ph" style="width:130px;height:130px;font-size:42px"><%= h.initial(featuredMember.username) %></span>
           <% } %>
         </div>
         <div>

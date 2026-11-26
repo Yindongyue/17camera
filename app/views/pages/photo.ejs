@@ -56,6 +56,8 @@
       <h3>关于作者</h3>
       <% if (userAvatar(author)) { %>
         <img class="avatar" src="<%= userAvatar(author) %>" alt="<%= author.username %>">
+      <% } else { %>
+        <span class="avatar-ph" style="width:100%;aspect-ratio:1;font-size:32px;margin-bottom:10px"><%= h.initial(author.username) %></span>
       <% } %>
       <p style="margin:0 0 6px;font-size:14px"><a href="/author/<%= encodeURIComponent(photo.users) %>"><%= photo.users %></a></p>
       <span class="badge <%= h.badge(author.flag).cls %>"><%= h.badge(author.flag).label %></span>

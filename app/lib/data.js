@@ -105,7 +105,16 @@ function modelCover(name) {
   const shot = mmphoto
     .filter((m) => m.name === name)
     .sort((a, b) => Number(a.pid) - Number(b.pid))[0];
-  return shot ? mmSrc(shot) : null;
+  return shot && assetSrc([shot.jhhao, shot.pic].filter(Boolean)) ? mmSrc(shot) : null;
+}
+
+/* Featured model image: prefer the legacy cover, fall back to the first portrait shot. */
+function modelImage(m) {
+  if (!m) return null;
+  const parts = m.tj_pic
+    ? (m.tj_pic.includes('/') ? m.tj_pic.split('/') : [m.jhhao, m.tj_pic])
+    : [];
+  return assetSrc(parts.filter(Boolean)) || modelCover(m.name);
 }
 
 function categoryName(id) {
@@ -113,9 +122,18 @@ function categoryName(id) {
   return row ? row.lb_name : '';
 }
 
+/* Avatars are legacy `tj_pic` values; only serve them when the packaged asset really exists. */
+const assetIndex = require('../assets/index.json');
+const IMAGE_RE = /\.(jpe?g|png|gif|webp|bmp)$/i;
+
+function assetSrc(parts) {
+  if (!parts.length || !IMAGE_RE.test(parts[parts.length - 1])) return null;
+  return assetIndex['pic/' + parts.join('/')] ? `/pic/${parts.map(encodeURIComponent).join('/')}` : null;
+}
+
 function userAvatar(u) {
   if (!u || !u.tj_pic) return null;
-  return `/pic/${u.tj_pic.split('/').map(encodeURIComponent).join('/')}`;
+  return assetSrc(u.tj_pic.split('/').filter(Boolean));
 }
 
 function photosByAuthor(username) {
@@ -332,7 +350,7 @@ module.exports = {
   users, photoReviews, newsReviews, mmphoto, models, big, leib, leib2,
   caSorts, caProducts, forums, news, state,
   photos, compete, threads, posts,
-  userOf, authorFolder, photoSrc, competeSrc, mmSrc, userAvatar, modelCover, categoryName,
+  userOf, authorFolder, photoSrc, competeSrc, mmSrc, userAvatar, modelCover, modelImage, categoryName,
   photosByAuthor, photosByCategory, commentsFor, newsById, addHit, hitCount,
   threadRows, postRows, threadsOfForum, postsOfThread, forumById, threadById, forumStats,
   createUser, addComment, createThread, replyThread, nextId, persist, hydrate,

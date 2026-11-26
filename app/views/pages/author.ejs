@@ -4,6 +4,8 @@
   <div class="panel" style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
     <% if (userAvatar(profile)) { %>
       <img src="<%= userAvatar(profile) %>" alt="<%= profile.username %>" style="width:180px;border-radius:10px;flex:none">
+    <% } else { %>
+      <span class="avatar-ph" style="width:180px;height:180px;font-size:58px;border-radius:10px;flex:none"><%= h.initial(profile.username) %></span>
     <% } %>
     <div style="flex:1;min-width:220px">
       <h1 style="font-size:22px;margin:0 0 6px"><%= profile.username %></h1>

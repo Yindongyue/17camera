@@ -63,6 +63,7 @@ app.use((req, res, next) => {
   res.locals.photoSrc = db.photoSrc;
   res.locals.competeSrc = db.competeSrc;
   res.locals.mmSrc = db.mmSrc;
+  res.locals.modelImage = db.modelImage;
   res.locals.userAvatar = db.userAvatar;
   res.locals.currentPath = req.path;
   res.locals.nav = [

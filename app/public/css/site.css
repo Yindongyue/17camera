@@ -126,6 +126,11 @@ main { padding: 26px 0 50px; }
 .side-card { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 16px; }
 .side-card h3 { margin: 0 0 12px; font-size: 14px; color: #333; border-left: 3px solid var(--accent); padding-left: 8px; }
 .side-card .avatar { width: 100%; border-radius: 8px; display: block; margin-bottom: 10px; }
+.avatar-ph {
+  display: inline-flex; align-items: center; justify-content: center;
+  box-sizing: border-box; background: #ece9e4; color: #9a948a;
+  border-radius: 8px; font-weight: 600; user-select: none;
+}
 
 /* forms */
 .form-row { margin-bottom: 13px; }
